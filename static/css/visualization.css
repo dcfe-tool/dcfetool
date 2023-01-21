@@ -1,0 +1,29 @@
+body {
+    background-color: bisque;
+}
+
+.visual_card {
+    margin: 5px;
+    width: 35rem;
+    height: 30rem;
+    border: none;
+    overflow: auto;
+    cursor: pointer;
+}
+
+.customChart_card {
+    margin: 5px;
+    width: auto;
+    height: auto;
+    border: none;
+    overflow: auto;
+}
+
+.categorical-cf-charts img:hover {
+    transform: scale(1.1);
+    overflow: hidden;
+    z-index: 999999;
+    cursor: pointer;
+}
+
+/* Heatmap */

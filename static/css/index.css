@@ -1,0 +1,411 @@
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background-color: bisque;
+}
+
+.page-content-wrapper {
+  position: relative;
+  margin-left: 50px;
+}
+
+.content-box {
+  color: black;
+  width: 27rem;
+  height: 50rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-right: 2%;
+  border: none;
+}
+
+.content-value {
+  color: cornflowerblue;
+}
+
+.kurt-skew-box {
+  color: black;
+  width: 30rem;
+  height: 40rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-right: 2%;
+  border: none;
+}
+
+.corr_card {
+  width: auto;
+  height: auto;
+  border: none;
+}
+
+.mean_card {
+  width: 50rem;
+  height: 40rem;
+  padding-bottom: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: none;
+}
+
+.median_card {
+  width: 50rem;
+  height: 40rem;
+  padding-bottom: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* margin-left: 3%; */
+  border: none;
+}
+
+.NaN_card {
+  width: 45rem;
+  height: 40rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: none;
+}
+
+.dataset_card {
+  width: 100%;
+  height: 600px;
+  margin-bottom: 10px;
+  overflow: auto;
+  border: 1px solid block;
+}
+
+.attrDropCard {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border: 1px solid block;
+}
+
+.attrDropCompleteCard {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+  border: 1px solid block;
+}
+
+#tooltip {
+  cursor: pointer;
+}
+
+.content-title {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+#menu-content ul {
+  padding: 3px;
+}
+
+#sidebar-wrapper {
+  position: fixed;
+  left: 0;
+  min-width: 25rem;
+  min-height: 100vh;
+  margin-left: -15rem;
+  -webkit-transition: margin 0.25s ease-out;
+  -moz-transition: margin 0.25s ease-out;
+  -o-transition: margin 0.25s ease-out;
+  transition: margin 0.25s ease-out;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 2.875rem 2.25rem;
+  font-style: italic;
+  font-size: 25px;
+  font-family: cursive;
+  color: azure;
+}
+
+#sidebar-wrapper .list-group {
+  width: 13rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+  position: relative;
+  margin-left: 16%;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
+  #wrapper.toggled #sidebar-wrapper {
+    margin-left: -15rem;
+  }
+}
+
+/* Dataset Overview page  */
+
+.definitions {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 20px;
+}
+
+/* Custom Scrollbar */
+
+/* width */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+  background: rgb(151, 147, 147);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(118, 125, 133);
+}
+
+/* custom spinner */
+
+.no-js #loader {
+  display: none;
+}
+
+.js #loader {
+  display: block;
+  position: absolute;
+  left: 100px;
+  top: 0;
+}
+
+.se-pre-con {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: url(https://smallenvelop.com/wp-content/uploads/2014/08/Preloader_11.gif) center no-repeat #fff;
+}
+
+/* Responsiveness for all Mobile Devices  */
+
+/* ----------- iPhone 4 and 4S ----------- */
+
+/* Portrait and Landscape */
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Portrait */
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Landscape */
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+
+/* Portrait and Landscape */
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Portrait */
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Landscape */
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+
+/* Portrait and Landscape */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Portrait */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Landscape */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+
+/* Portrait and Landscape */
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Portrait */
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Landscape */
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* ----------- iPhone X ----------- */
+
+/* Portrait and Landscape */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Portrait */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+/* Landscape */
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}
+
+@media (max-width:499px) {
+  body {
+    display: none;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    background-color: bisque;
+  }
+}

@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block normalization %} active {% endblock %}
+{% block content %}
+{% if message %}
+        {% if status == 'Success' %}
+        <div
+          class="alert alert-success text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% else %}
+         <div
+          class="alert alert-danger text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="container p-3">
+          
+          <div class="card attrDropCard pt-3 pb-3 pl-5 bg-light">
+             <span 
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    id="tooltip"
+                    title="Normalization"
+                    ><i
+                      class="fa fa-info-circle text-info"
+                      aria-hidden="true"
+                    ></i
+                  ></span>
+            <div class="mr-5 text-center text-primary font-weight-bold h4">
+                  Select Features for Normalization
+                </div>
+            {% if NaN_percent == 0 %}
+            <div class="form-check mt-3">
+              <input type="checkbox" id="normSelect" class="form-check-input">
+              <label class="form-check-label text-capitalize small text-dark pl-4 pt-1">Check All</label>
+            </div>
+            <form
+                class="form-group mt-5"
+                action="/NormalizationCalc/{{fName}}/"
+                onsubmit="return Validate();"
+                method="POST"
+                id="normalizationForm"
+                enctype="multipart/form-data"
+            >
+            {% csrf_token %}
+            <div class="row mb-5">
+              <div class="col-3">
+                <div class="form-group">
+                  <select onchange="normMethodValidation()" name="normMethodSelected" id="normMethod" class="form-control form-control-lg">
+                    <option selected disabled>Choose</option>
+                    <option value="min-max">Min-Max</option>
+                    <option value="z-score">Z-Score</option>
+                    <option value="decimal-scaling">Decimal-Scaling</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-2" style="display:none;" id="minNorm">
+                <div class="form-group">
+                  <input type="number" class="form-control" name="minNorm"  placeholder="Min">
+                </div>
+              </div>
+              <div class="col-2" style="display:none;" id="maxNorm">
+                <div class="form-group">
+                  <input type="number" class="form-control" name="maxNorm"  placeholder="Max">
+                </div>
+              </div>
+            </div>
+              {% if normalization_list %}
+              <div class="row">
+              {% for clm in normalization_list %}
+                <div class="form-check col-6">
+                  {% if NaN_percent == 0 %}
+                  <input type="checkbox"  name="normCols" value="{{clm}}" class="form-check-input ml-5 col normSelect">
+                  <label class="form-check-label col-6 text-capitalize" for="normCols">{{clm}}</>
+                  {% else %}
+                  <input hidden type="checkbox" disabled value="" class="form-check-input ml-5 col">
+                  <label hidden class="form-check-label col-6 text-capitalize"></>
+                  {% endif %}
+                </div>
+              {% endfor %}
+              </div>
+            <div class="row mt-5">
+                <div style="margin-left: 83rem;">
+                <button type="submit" class="btn btn-primary"
+                    >Proceed</button
+                >
+                </div>
+            </div>
+            {% else %}
+            <div class="row mt-5">
+              <div class="col mr-5 mt-5">
+                <h5 class="alert alert-danger text-center">Numberical Features Does Not Exits</h5>
+            </div>
+            
+            {% endif %}
+            
+            </form>
+            {% else%}
+            <div class="mr-5 mt-5">
+                <h5 class="alert alert-danger text-center">Your Dataset Have NaN Values</h5>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        
+        
+        <div class="content-1 definitions">
+          <div class="row mt-5">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-bold">Normalization</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">The goal of normalization is to transform features to be on a similar scale. This improves the performance and training stability of the model.</p>
+                <p></p>
+                <h4 class="mt-5">Three common normalization techniques may be useful:</h4>
+                <div class="mt-2"><ol class="small">
+                  <li class="font-weight-normal text-info">Min-Max Normalization</li>
+                  <li class="font-weight-normal text-info">Decimal Scalling</li>
+                  <li class="font-weight-normal text-info">Z-Score</li>
+                </ol></div>
+              </div>
+          </div>
+        </div>
+        <div class="content-1 definitions">
+          <div class="row mt-5">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-normal">Min-Max Normalization</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">What is easier to understand – the difference between 200 and 1000000 or the difference between 0.2 and 1. Indeed, when the difference between the minimum and maximum values is less, the data becomes more readable. The min-max normalization functions by converting a range of data into a scale that ranges from 0 to 1. Min-Max Normalization Formula</p>
+                <p class="text-center"><img src="{% static 'images/Normalization/min-max.png' %}" alt="min-max"/></p>
+                <p class="font-weight-bold text-dark mt-3 small">Note:</p><span class="small"> User can identify the minimum value and maximum value of each feature by seeing the Box-plot (refer below image) in the Data visualization part.</span>
+                <p class="text-center"><img src="{% static 'images/Normalization/min-max_chart.png' %}" alt="min-max_chart"/></p>
+              </div>
+          </div>
+        </div>
+        <div class="content-2 definitions">
+          <div class="row mt-5">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-normal">Decimal Scalling</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">Decimal scaling is a data normalization technique. In this technique, we move the decimal point of values of the attribute. This movement of decimal points totally depends on the maximum value among all values in the attribute.</p>
+                <p class="small mt-3">A value v of attribute A is can be normalized by the following formula</p>
+                <p class="small mt-3 font-weight-bold">Normalized value of attribute = (vi / 10j)</p>
+              </div>
+          </div>
+        </div>
+        <div class="content-3 definitions">
+          <div class="row mt-5">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-normal">Z-Score</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">Z-score is a variation of scaling that represents the number of standard deviations away from the mean. You would use z-score to ensure your feature distributions have mean = 0 and std = 1. It’s useful when there are a few outliers, but not so extreme that you need clipping.</p>
+                <p class="small mt-3">The formula for calculating the z-score of a point, x, is as follows:</p>
+                <p class="font-weight-bold mt-3 small">x′= (x−μ)/σ</p>
+              </div>
+          </div>
+        </div>
+{% endblock  %}
+ 
+
+{% block javascript %}
+<script>
+   
+  function normMethodValidation() {
+    var myNormMethod = document.getElementById("normMethod").value;
+    if(myNormMethod === "min-max") {
+      document.getElementById("minNorm").style.display = "block";
+      document.getElementById("maxNorm").style.display = "block";
+    } else {
+      document.getElementById("minNorm").style.display = "none";
+      document.getElementById("maxNorm").style.display = "none";
+    }
+  }
+
+
+
+   $("#normSelect").click(function () {
+        $('.normSelect').not(this).prop('checked', this.checked);
+      });
+
+</script>
+{% endblock  %}
+    
+   

@@ -1,0 +1,763 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Epidemiology Data Analytics</title>
+
+    <!-- bootstrap cdn links -->
+    <!-- <link
+      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
+      rel="stylesheet"
+    /> -->
+
+    <!-- cdn links -->
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+    <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+
+    <!-- heatmap -->
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.7.1/js/anychart-heatmap.min.js"></script>
+
+    {% comment %} Plotly {% endcomment %}
+    <script src="/static/js/plotly-latest.min.js"></script>
+    
+    
+    
+   <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> 
+  
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+  
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> 
+
+    <!-- font awesome icon links -->
+    <link
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/visualization.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}" />
+  </head>
+
+  <body>
+    <!-- preloader -->
+    {% comment %} <div class="loader-wrapper">
+      <span class="loader"><span class="loader-inner"></span></span>
+    </div> {% endcomment %}
+    <input type="text" id="fileName" value={{fName}} hidden />
+    <div class="d-flex" id="wrapper">
+      <!-- Sidebar -->
+      <div class="border-right bg-dark text-white" id="sidebar-wrapper">
+        <div class="sidebar-heading text-white">Epidemiology</div>
+        <div class="nav-side-menu">
+          <div class="menu-list">
+            <ul id="menu-content" class="menu-content collapse out">
+              <li>
+                <a href="/Dataset/{{fName}}/" target="_blank"
+                  ><i class="fa fa-table fa-sm"></i> Dataset
+                </a>
+              </li>
+              <li>
+                <a href="/Home/{{fName}}/">
+                  <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                  Dataset Overview
+                </a>
+              </li>
+
+              <li>
+                <a href="/Explore/{{fName}}/"
+                  ><i class="fa fa-table fa-sm"></i> Data Exploration
+                </a>
+              </li>
+              
+              <li
+                data-toggle="collapse"
+                data-target="#service"
+                class="collapsed"
+              >
+                <a
+                  ><i class="fa fa-edit fa-sm"></i> Data Imputation
+                  <span class="arrow"></span
+                ></a>
+              </li>
+              <ul class="sub-menu collapse" id="service">
+                 <li>
+                  <a data-toggle="modal" data-target="#myModal"
+                    >Complete Drop NaN</a
+                  >
+                </li>
+                <li><a href="/AttrDropNan/{{fName}}/"> Attribute Wise Drop NaN</a></li>
+                <li><a href="/AttrFillNan/{{fName}}/"> Attribute Wise Fill NaN</a></li>
+                 <li> <a disabled href="#"
+                  >KNN Imputation</a></li>
+                   <li> 
+                  <a disabled href="#">Iterative Imputation</a>
+                </li>
+              </ul>
+
+              <li data-toggle="collapse" data-target="#new" class="collapsed">
+                <a href="#"
+                  ><i class="fa fa-cogs fa-sm"></i> Feature Engineering
+                  <span class="arrow"></span
+                ></a>
+              </li>
+              <ul class="sub-menu collapse" id="new">
+                <li><a href="/Binning/{{fName}}/">Binning</a></li>
+                <li><a href="/LabelEncoding/{{fName}}/">Label Encoding</a></li>
+                <li><a href="/OneHotEncoding/{{fName}}/">One Hot Encoding</a></li>
+                <li><a href="/OrdinalEncoding/{{fName}}/"> Ordinal Encoding</a></li>
+                <li><a href="/BinaryEncoding/{{fName}}/">Binary Encoding</a></li>
+                <li><a href="/CountFrequencyEncoding/{{fName}}/">Count Frequency Encoding</a></li>
+                <li><a href="/Normalization/{{fName}}/">Normalization</a></li>
+                <li><a href="/LogTransform/{{fName}}/">Log Transform</a></li>
+
+              </ul>
+
+              <li class="active">
+                <a href="/Visualize/{{fName}}/">
+                  <i class="fa fa-line-chart fa-sm"></i> Visualization
+                </a>
+              </li>
+
+               <li data-toggle="collapse" data-target="#download" class="collapsed">
+                <a href="#"
+                  ><i class="fa fa-download fa-sm"></i> Download Dataset
+                  <span class="arrow"></span
+                ></a>
+              </li>
+
+             <ul class="sub-menu collapse" id="download">
+                <li><a href="/DownloadOriginal/{{fName}}/"> Original</a></li>
+                <li><a href="/DownloadProcessed/{{fName}}/"> Processed</a></li>
+             </ul>
+
+              <li>
+                <a href="/">
+                  <i class="fa fa-home fa-sm"></i> Home
+                </a>
+              </li>
+               <li style="margin-top:15%;"></li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li>
+                <a href="/Undo/{{fName}}">
+                  <i class="fa fa-undo" aria-hidden="true"></i>Undo <span class="text-muted pl-2 text-right">Actions taken : {{undo_count}}</span>
+                </a>
+              </li>
+              <li></li>
+              <li></li>
+              <li></li>
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Page Content -->
+      <div class="mt-3" id="page-content-wrapper">
+        {% if message %}
+        {% if status == 'Success' %}
+        <div
+          class="alert alert-success text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% else %}
+         <div
+          class="alert alert-danger text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="container mt-5">
+          <div class="row border border-dark pl-3">
+            <p class="text-dark h4">Custom Chart <span class="text-danger"> Feature Comparison</span></p>
+          </div>
+          <form class="text-center m-5" action="/customChart/{{fName}}/" method="POST">
+            {% csrf_token %}
+          <div class="form">
+              <div class="form-inline">
+                <select  name="param1" class="form-control-lg rounded">
+                  <option value="" selected>Choose X</option>
+                  {% for clm in clm_list %}
+                    {% if clm == x_selected %}
+                    <option value="{{clm}}" selected>{{clm}}</option>
+                    {% else %}
+                    <option value="{{clm}}">{{clm}}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <select name="param2" class="ml-3 form-control-lg rounded">
+                  <option value="" selected>Choose Y</option>
+                  {% for clm in clm_list %}
+                    {% if clm == y_selected %}
+                    <option value="{{clm}}" selected>{{clm}}</option>
+                    {% else %}
+                    <option value="{{clm}}">{{clm}}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <select name="chartType" class="ml-3 form-control-lg rounded">
+                  <option value="" selected>Chart Type</option>
+                  <option value="Pie">Pie Chart</option>
+                  <option value="Bar">Bar Chart</option>
+                  <option value="Scatter">Scatter Chart</option>
+                  <option value="Box">Box Chart</option>
+                </select>
+                <button class="ml-3 btn btn-primary">Plot</button>
+            </div>
+          </form>
+          <div class="card text-center mt-2 customChart_card bg-white">
+            {% if custom_chart_status != '' %}
+              <div id="myDiv1" style="width:100rem; overflow:hidden;" class="container z-depth-1 mt-2"><!-- Plotly chart will be drawn inside this DIV --></div>
+              {% comment %} <div id="myDiv2" style="width:100rem; overflow:hidden;" class="container z-depth-1 mt-2"><!-- Plotly chart will be drawn inside this DIV --></div>
+              <div id="myDiv3" style="width:100rem; overflow:hidden;" class="container z-depth-1 mt-2"><!-- Plotly chart will be drawn inside this DIV --></div>
+              <div id="myDiv4" style="width:100rem; overflow:hidden;" class="container z-depth-1 mt-2"><!-- Plotly chart will be drawn inside this DIV --></div>
+              <div id="myDiv5" style="width:100rem; overflow:hidden;" class="container z-depth-1 mt-2"><!-- Plotly chart will be drawn inside this DIV --></div> {% endcomment %}
+            {% endif %}
+            {% if customChartMsg %}
+            <input type="text" hidden id="param1" value="{{param1}}">
+            <input type="text" hidden id="value1" value="{{value1}}">
+            <input type="text" hidden id="param2" value="{{param2}}">
+            <input type="text" hidden id="value2" value="{{value2}}">
+            {% endif %}
+          </div>
+        </div>
+
+        
+        <div class="container mt-5">
+          <div class="row border border-dark pl-3">
+            <p class="text-dark h4">Visualization of <span class="text-danger">{{fName}}</span> dataset :</p>
+          </div>
+          <div class="row">
+            <div class="col-4">
+                <div class="card visual_card shadow-sm rounded-lg">
+                  <div class="p-5">{{fName}} Overview</div>  
+                  <canvas id="overallChart"></canvas>
+                </div>
+            </div>
+            <div class="col-4">
+                <div  class="card visual_card shadow-sm rounded-lg">
+                  <div class="p-5">Skewness</div>  
+                  <canvas id="skewnessChart"></canvas>
+                </div>
+            </div>
+            <div class="col-4 ">
+                <div class="card visual_card shadow-lsm rounded-lg">
+                  <div class="p-5">Kurtosis</div>  
+                  <canvas id="kurtosisChart"></canvas>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card visual_card shadow-sm rounded-lg">
+                  <div class="p-5">Missing Data</div>
+                    <canvas id="nanChart"></canvas>
+                </div>
+            </div>
+          </div>
+          <div class="row border border-dark pl-3 mb-5 mt-5">
+            <p class="text-dark h4">Count Frequency of <span class="text-danger">Categorical Features</span></p>
+          </div>
+          {% if categorical_clm_list %}
+          <div class="row">
+            {% for image in categorical_clm_list %}
+            <div class="col-6 categorical-cf-charts p-2">
+              <!-- <div class="card visual_card rounded-lg shadow-lg"> -->
+                <!-- <span class="text-center p-1 bg-dark text-white text-capitalize">{{image}}</span> -->
+                <img width="500" src="{% static 'charts/'|add:image|add:'.png' %}" alt="{{image}}">
+              <!-- </div> -->
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="row p-5"><div class="col-12 text-center">
+            <p class="alert alert-danger">Categorical Features not exists</p>
+          </div>   
+          {% endif %}
+          <div class="row border border-dark pl-3 mb-5 mt-5 col-12">
+            <p class="text-dark h4">Boxplot - <span class="text-danger">Numerical Features</span></p>
+          </div>
+
+          {% if numerical_clm_list %}
+            <div class="row">
+              {% for boxplot in numerical_clm_list %}
+              <div class="col-6 numerical-cf-charts p-1">
+                <span class="text-center text-capitalize h5 text-primary">{{boxplot}}</span>
+                  <img width="500" src="{% static 'boxplotcharts/'|add:boxplot|add:'.png' %}" alt="numerical-cf-charts">
+              </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="row p-5"><div class="col-12 text-center">
+              <p class="alert alert-danger">Numerical Features not exists</p>
+            </div>   
+          {% endif %}
+
+          
+          
+        </div>
+        <div class="container mt-5"><div class="row border border-dark pl-3">
+            <p class="text-dark h4">Correlation <span class="text-danger">(Heatmap)</span></p>
+          </div> 
+          <div class="row">
+            <div class="col-12 mt-5 text-left">
+              <div class="card visual_card rounded " style="width:60rem;height:50rem;">
+                {% comment %} <div id="heatMap"><img class="" style="width:60rem;height:45rem; object-fit: cover;" src="{% static 'charts/'|add:fName|add:'_heatmap.png' %}" alt=""></div> {% endcomment %}
+                <div id="myDiv123" style="width:50rem;" class="container z-depth-1 mt-2"></div>
+              </div>
+            </div>    
+          </div>
+        </div>
+
+        
+
+    </div>
+
+
+
+        
+
+    <!-- getting permission here to drop the columns -->
+
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="alert-heading">
+              <h4
+                class="modal-title text-danger font-weight-bold h5"
+                id="myModalLabel"
+              >
+                <i
+                class="fa fa-hand-o-down text-danger font-weight-bold"
+                aria-hidden="true"
+              ></i> Read Carefully
+              </h4>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="drop-rules mt-1">
+               {% if NaN_percent != 0 %}
+              <p>
+                Your dataset having
+                <span class="font-weight-bold">{{NaN_percent}}%</span> of NaN
+                values.
+              </p>
+             
+              <p>
+                <span class=" font-weight-bold">As per the Rule</span>
+                <ul>
+                  <li>The NaN values of your dataset should be <span class="font-weight-bold"> <= 35%</span> then only your
+                  dataset is eligible to drop the NaN.</li>
+                </ul>
+              </p>
+              {% else %}
+              <p>
+                Your dataset having
+                <span class="font-weight-bold">0</span> NaN
+                values.
+              </p>
+               <p>
+                <span class=" font-weight-bold">You need not to do this operation.</span>
+              </p>
+              {% endif %}
+              {% if NaN_percent != 0 %}
+              <p class="font-weight-bold mt-5">Note:</p>
+              <p>You lose your data while dropping all the NaN values, If your dataset contains >= 35% NaN values.</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+              Close
+            </button>
+            {% if NaN_percent != 0 and NaN_percent <= 35 %}
+            <a
+              type="button"
+              style="margin-top: 0%;"
+              href="/CompleteDropNan/{{fName}}/"
+              class="btn btn-success"
+              >Proceed</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+
+
+    <script>
+      var fname = "{{fName}}";
+
+      var endpoint = '/api/'+fname+'/';
+
+      $.ajax({ 
+        method: "GET",
+        url: endpoint, 
+        success: function(data) { 
+          drawSkewChart(data, 'skewnessChart');
+          drawKurtChart(data, 'kurtosisChart');
+          drawOverallChart(data, 'overallChart');
+          drawNaNChart(data, 'nanChart');
+         
+        }, 
+        error: function(error_data) { 
+          console.log("Error"); 
+        } 
+      })
+
+      function drawSkewChart(data, id) { 
+        var labels = data.skew_chartlabel; 
+        var chartLabel = data.label; 
+        var chartdata = data.skew_chartdata; 
+
+        var ctx = document.getElementById(id).getContext('2d'); 
+        var chart = new Chart(ctx, { 
+          type: 'line', 
+  
+          data: { 
+            labels: labels, 
+            datasets: [{ 
+              label: chartLabel, 
+              data: chartdata, 
+              backgroundColor : '#4C72B0',
+              //backgroundColor : '#FFFFFF',
+              borderColor: '#4C72B0',
+            }] 
+          },
+         options: {
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      fontSize: 10
+                  }
+              }],
+              xAxes: [{
+                  ticks: {
+                      fontSize: 8
+                  }
+              }]
+            }
+          }
+  
+        }); 
+      } 
+
+      function drawKurtChart(data, id) { 
+        var labels = data.kurt_chartlabel; 
+        var chartLabel = data.label; 
+        var chartdata = data.kurt_chartdata; 
+
+        var ctx = document.getElementById(id).getContext('2d'); 
+        var chart = new Chart(ctx, { 
+          type: 'line', 
+  
+          data: { 
+            labels: labels, 
+            datasets: [{ 
+              label: chartLabel, 
+              data: chartdata, 
+              backgroundColor : '#4C72B0',
+              //backgroundColor : '#FFFFFF',
+              borderColor: '#4C72B0',
+            }] 
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      fontSize: 10
+                  }
+              }],
+              xAxes: [{
+                  ticks: {
+                      fontSize: 8
+                  }
+              }]
+            }
+          }
+        }); 
+      }
+
+      function drawOverallChart(data, id){
+        var labels = data.cols_chartlabel
+        var chartData = data.cols_chartdata
+        var chartLabel = data.label
+        var ctx = document.getElementById(id).getContext('2d'); 
+        var chart = new Chart(ctx, { 
+          type: 'pie', 
+          data: { 
+            labels: labels, 
+            datasets: [{ 
+              label: chartLabel, 
+              data: chartData, 
+              backgroundColor: [
+                '#4C72B0',
+                '#C44E52',
+                '#55A868',
+                
+              ],
+              borderColor: [
+                '#4C72B0',
+                '#C44E52',
+                '#55A868',   
+              ],
+            }] 
+          },
+         options: {
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      fontSize: 0,
+                  }
+              }],
+              xAxes: [{
+                  ticks: {
+                      fontSize: 8
+                  }
+              }]
+            }
+          }
+  
+        });
+      }
+      
+      function drawNaNChart(data, id) { 
+        var labels = data.NaN_clms; 
+        var chartLabel = data.label; 
+        var chartdata = data.NaN_val; 
+
+        var ctx = document.getElementById(id).getContext('2d'); 
+        var chart = new Chart(ctx, { 
+          type: 'bar', 
+
+          data: { 
+            labels: labels, 
+            datasets: [{ 
+              label: chartLabel, 
+              data: chartdata, 
+              backgroundColor : '#4C72B0',
+              //backgroundColor : '#FFFFFF',
+              borderColor: '#4C72B0',
+            }] 
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                  ticks: {
+                      fontSize: 10
+                  }
+              }],
+              xAxes: [{
+                  ticks: {
+                      fontSize: 8
+                  }
+              }]
+            }
+          }
+
+        }); 
+    } 
+
+    </script>
+
+  
+
+
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="/static/js/init.js"></script>
+    <script>
+
+
+     
+      var data1 = [{
+        values: [{% for ele in count %}'{{ele}}', {% endfor %}],
+        labels: [{% for ele in featureValues %}'{{ele}}', {% endfor %}],
+        type: 'pie'
+      }];
+
+      var layout = {
+        title: '{{featureName}}',
+        showlegend: true,
+        legend: {"orientation": "h"},
+        height: 400,
+        width: 700
+      };
+
+
+
+
+
+      
+      var data2 = [{
+        x: [{% for ele in featureValues %}'{{ele}}', {% endfor %}],
+        y: [{% for ele in count %}{{ele}}, {% endfor %}],
+        type: 'bar'
+      }];
+
+      var layout = {
+        title: '{{featureName}}',
+    
+      };
+
+    
+
+
+      var subject = [{% for ele in featureValues %}'{{ele}}', {% endfor %}]
+      var score = {{count}}
+      var sample =[1,2,3,4,5,6,7,8,9,10,11,12]
+
+      var data3 = [{
+        type: 'scatter',
+        x: subject,
+        y: score,
+        mode: 'markers',
+        marker: {
+          size:{{count}} ,
+        },
+        transforms: [{
+          type: 'groupby',
+          groups: subject,
+        }]
+      }] 
+      
+      var layout = {
+        title: '{{featureName}}',
+      };
+
+
+      
+
+      var Feature = [{% for ele in featureValues %}'{{ele}}', {% endfor %}]
+      var data4 = [{
+        y: Feature,
+        type: 'box'
+      }];
+
+      var layout = {
+        title: '{{featureName}}',
+      };
+
+
+      var chartType = '{{chart_type}}';
+
+      if(chartType == 'Pie'){
+        Plotly.newPlot('myDiv1', data1, layout,{responsive: true,displaylogo: false});
+      }else if(chartType == 'Bar'){
+        Plotly.newPlot('myDiv1', data2, layout, {responsive: true,displaylogo: false});
+      }else if(chartType == 'Scatter'){
+        Plotly.newPlot('myDiv1', data3, layout,{responsive: true,displaylogo: false})
+      }else if(chartType == 'Box'){
+        Plotly.newPlot('myDiv1', data4, layout, {responsive: true,displaylogo: false});
+      }else{
+        Plotly.newPlot('myDiv1', data2, layout,{responsive: true,displaylogo: false});
+      }
+
+
+
+    </script>
+
+    
+
+    <!-- Menu Toggle Script -->
+    <script>
+      $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+      });
+
+
+      //customChart function
+      var label1 = document.getElementById('param1').value;
+      var label2 =  document.getElementById('param2').value;
+      var chartLabel = "{{fName}}" ;
+      var data1 = parseInt(document.getElementById('value1').value); 
+      var data2 = parseInt(document.getElementById('value2').value);  
+
+      console.log(data1, data2)
+
+      var ctx = document.getElementById('customChart').getContext('2d'); 
+      var chart = new Chart(ctx, { 
+        type: 'bar', 
+        data: {
+          labels: [label1, label2], 
+          datasets: [{ 
+            label: "Percentage (%)",
+            data: [data1, data2],
+            backgroundColor : ['#4C72B0', '#55A868'],
+            borderColor: ['#4C72B0','#55A868'],
+          }],
+        }, options: {
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true,
+                }]
+            }
+          }
+      });
+
+    </script>
+    <script>
+      $(document).ready(function () {
+        //Preloader
+        function hidePreloader() {
+          var preloader = $(".loader-wrapper");
+          preloader.fadeOut("slow");
+        }
+        hidePreloader();
+      });
+    </script>
+
+  </body>
+</html>

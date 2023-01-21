@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block binary-encode %} active {% endblock %}
+{% block content %}
+{% if message %}
+        {% if status == 'Success' %}
+        <div
+          class="alert alert-success text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% else %}
+         <div
+          class="alert alert-danger text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="container p-3">
+          
+          <div class="card attrDropCard pt-3 pb-3 pl-5 bg-light">
+             <span 
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    id="tooltip"
+                    title="Binary-Encoding performs only on Categorical Features"
+                    ><i
+                      class="fa fa-info-circle text-info"
+                      aria-hidden="true"
+                    ></i
+                  ></span>
+            <div class="mr-5 text-center text-primary font-weight-bold h4">
+                  Select Features for Binary Encode
+                </div>
+            {% if NaN_percent == 0 %}
+           
+            <form
+                class="form-group mt-5"
+                action="/BinaryEncodingCalc/{{fName}}/"
+                method="POST"
+                id="binarycodingForm"
+                enctype="multipart/form-data"
+            >
+            {% csrf_token %}
+            {% if processing_list %}
+            <div class="row mb-5">
+                <div class="col-3">
+                    {% comment %} <div class="form-check mt-3">
+                        <input type="checkbox" name="drop-column"  class="form-check-input">
+                        <label class="form-check-label text-capitalize ml-4 small">I agree to delete the column.</>
+                    </div> {% endcomment %}
+                    <div class="form-check col-6 mt-2">
+                      <input type="checkbox" id="binarySelect" class="form-check-input">
+                      <label class="form-check-label text-capitalize small text-dark pl-4 pt-1">Check All</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+            {% for clm in processing_list %}
+              <div class="form-check col-6">
+                {% if NaN_percent == 0 %}
+                <input type="checkbox" name="binaryCol" value="{{clm}}" class="form-check-input ml-5 col binarySelect">
+                <label class="form-check-label col-6 text-capitalize" for="binaryCol">{{clm}}</>
+                {% else %}
+                <input hidden type="checkbox" disabled value="" class="form-check-input ml-5 col">
+                <label hidden class="form-check-label col-6 text-capitalize"></>
+                {% endif %}
+              </div>
+            {% endfor %}
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-9"></div>
+                
+                <div class="col-md-1">
+                <button  class="btn btn-primary"
+                    >Proceed</button
+                >
+                </div>
+            </div>
+            {% else %}
+            <div class="row mt-5">
+              <div class="col mr-5 mt-5">
+                <h5 class="alert alert-danger text-center">Categorical Features Does Not Exits</h5>
+            </div>
+            </div>
+            {% endif %}
+            
+            </form>
+            {% else%}
+            <div class="mr-5 mt-5">
+                <h5 class="alert alert-danger text-center">Your Dataset Have NaN Values</h5>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% if processed_list %}
+        <div class="container p-3">
+           <div class="card attrDropCard pt-3 pb-3 pl-5 bg-light">
+          <div class="row">
+            <h5 class="text-primary font-weight-bold">Binary Encoded Features:</h5>
+          </div>
+          <div class="row">
+            {% for col in processed_list %}
+            <div class="col-3 mt-2">
+              <label class="form-check-label text-capitalize">{{col}}</>
+            </div>
+              {% endfor %}
+            </div>
+        </div>
+        </div>
+        {% endif %}
+          <div class="content-1 definitions">
+          <div class="row mt-5">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-bold">Binary Encoding</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">In this binary encoding scheme, the categorical feature is first converted into numerical using an ordinal encoder. Then the numbers are transformed in the binary number. After that binary value is split into different columns.</p>
+                <p class="small">Binary encoding works really well when there are a high number of categories. For example the cities in a country where a company supplies its products.</p>
+              </div>
+          </div>
+        </div>
+         
+ 
+{% endblock  %}
+
+{% block javascript %}
+
+<script>
+  $("#binarySelect").click(function () {
+     $('.binarySelect').not(this).prop('checked', this.checked);
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block remove_unwanted_features %} active {% endblock %}
+{% block content %}
+{% if message %}
+        {% if status == 'Success' %}
+        <div
+          class="alert alert-success text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% else %}
+         <div
+          class="alert alert-danger text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="container p-3">
+        <div class="col-12 p-2"><a href="/removeUnwantedFeatures/{{fName}}/"><i class="fa fa-refresh" aria-hidden="true"></i></a></div>
+
+        </div>
+
+        <div class="container p-3">
+           <div class="card attrDropCompleteCard pt-3 pb-3 pl-5 bg-light">
+            <span 
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    id="tooltip"
+                    title="Drop unwanted features"
+                    ><i
+                      class="fa fa-info-circle text-info"
+                      aria-hidden="true"
+                    ></i
+            ></span>
+            <div class="mr-5 text-center text-primary font-weight-bold h4">
+                  Select Unwanted Features to Drop 
+            </div>
+            <div class="form-check mt-3">
+              <input type="checkbox" id="dropColSelect" class="form-check-input">
+              <label class="form-check-label text-capitalize small text-dark pl-4 pt-1">Check All</label>
+            </div>
+           <form
+                class="form-group mt-5"
+                action="/removeUnwantedFeaturesCalc/{{fName}}/"
+                method="POST"
+                onsubmit="return confirm('The selected Feature(s) will be removed from your dataset.')"
+                id="form2"
+                enctype="multipart/form-data"
+              >
+              {% csrf_token %}
+              <div class="row">
+                {% for clm,percent in attr_drop_col_list %}
+                  <div class="form-check col-6">
+                    <input type="checkbox" name="dropFeatures" value="{{clm}}" class="form-check-input ml-5 col dropColSelect">
+                    <label class="form-check-label col-6 text-capitalize" for="dropFeatures">{{clm}}</label>
+                  </div>
+                  {% endfor %}
+              </div>
+            
+              <div class="row mt-5">
+                <div class="col-md-9"></div>
+               
+                <div class="col-md-1">
+                  <button id="dropColumn" class="btn btn-primary"
+                    >Drop</button
+                  >
+                </div>
+              </div>
+            <!-- </form> -->
+          </div>
+
+
+        <div class="content-1 definitions">
+          <div class="row mt-3">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-normal">Remove unwanted features</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">Unwanted data is a <code class="code">duplicate</code> or <code class="code">irrelevant</code> data. Scraping data from different sources and then integrating may lead to some duplicate data if not done efficiently. This redundant data should be removed as it is of no use and will only increase the amount of data and the time to train the model. Also, due to redundant records, the model may not provide accurate results as the duplicate data interferes with analysis process, giving more importance to the repeated values.</p>
+              </div>
+          </div>
+        </div>
+        </div>
+{% endblock %}
+
+
+{% block javascript %}
+ <script>
+      $("#dropColSelect").click(function () {
+        $('.dropColSelect').not(this).prop('checked', this.checked);
+      });
+    </script>
+{% endblock %}
+  

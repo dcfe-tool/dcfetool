@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block attr_fill_nan %} active {% endblock %}
+{% block content %}
+{% if message %}
+        {% if status == 'Success' %}
+        <div
+          class="alert alert-success text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% else %}
+         <div
+          class="alert alert-danger text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <!-- <a data-toggle="modal" data-target="#fillnaHelpModal" class="btn btn-info btn-sm ml-5 text-white">Help</a> -->
+        <div class="container p-3">
+          <div class="col-12 p-2"><a href="/AttrFillNan/{{fName}}/"><i class="fa fa-refresh" aria-hidden="true"></i></a></div>
+          <div class="card attrDropCard pt-3 pb-3 pl-5 bg-light">
+             <span 
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    id="tooltip"
+                    title="Inelligible features are disabled"
+                    ><i
+                      class="fa fa-info-circle text-info"
+                      aria-hidden="true"
+                    ></i
+              ></span>
+            <div class="mr-5 text-center text-primary font-weight-bold h4">
+              Select Features for Fill NaN
+            </div>
+            <div class="form-check col-6 mt-2">
+              <input type="checkbox" id="fillNan" class="form-check-input">
+              <label class="form-check-label text-capitalize small text-dark pl-4 pt-1">Check All</label>
+            </div>
+         <form
+            class="form-group mt-5"
+            action="/AttrFillNanCalc/{{fName}}/"
+            method="POST"
+            id="attrFillNaNForm"
+            enctype="multipart/form-data"
+          >
+          {% csrf_token %}
+          <div class="row mb-5">
+            <div class="col-3">
+              <div class="form-group">
+                <select class="form-control form-control-lg" name="fillnaMethods" onchange="myFunction()" id="mySelect">
+                  <option value="">Choose</option>
+                  <option value="fill">Fill</option>
+                  <option value="replace">Replace</option> 
+                </select>
+              </div>
+            </div>
+            <div class="col-3" style="display:none;" id="fill">
+              <div class="form-group">
+                <select class="form-control form-control-lg" name="fillType">
+                  <option selected disabled>Choose</option>
+                  <option value="ffill">Forward Fill</option>
+                  <option value="bfill">Backward Fill</option>
+                  <option value="mode">Mode Method</option>
+                  <option value="mean">Mean Values</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-3" style="display:none;"  id="replace_by">
+              <div class="form-group">
+                <input type="text" name="replaceBy"  placeholder="replace by" class="form-control form-control-lg">
+              </div>
+            </div>
+            
+          </div>
+          <div class="row">
+              {% for clm,percent in attr_fill_list %}
+              <div class="form-check col-6">
+                {% if percent != 0 %}
+                <input type="checkbox"  name="attrFillCols" value="{{clm}}" class="form-check-input ml-5 col fillNan">
+                <label class="form-check-label col-6 text-capitalize" for="attrFillCol">{{clm}} (<span class="text-danger"> {{percent}} %</span> )</>
+                {% else %}
+                <input type="checkbox"  disabled name="attrFillCols" value="{{clm}}" class="form-check-input ml-5 col">
+                <label class="form-check-label col-6 text-capitalize" for="attrFillCol">{{clm}} (<span class="text-danger"> {{percent}} %</span> )</>
+                {% endif %}
+              </div>
+              {% endfor %}
+          </div>
+          <div class="row mt-5">
+            <div class="col-md-9"></div>
+            
+             <div class="col-md-1">
+              <button  class="btn btn-primary"
+                >Fill</button
+              >
+            </div>
+          </div>
+          </form>
+          </div>
+        
+         <div class="content-1 definitions">
+          <div class="row mt-3">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-normal">Replacing missing values with Forward Fill</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small"><code class="code">ffill()</code> function is used to fill the missing value in the dataframe. <code class="code">ffill</code> stands for <code class="code">forward fill</code> and will propagate last valid observation forward.</p>
+              </div>
+          </div>
+        </div>
+        <div class="content-2 definitions">
+          <div class="row mt-3">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-normal">Replacing missing values with Backward Fill</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small"><code class="code">bfill()</code> function is used to fill the missing value in the dataframe. It will backward fill the NaN values that are present in the dataframe</p>
+              </div>
+          </div>
+        </div>
+        <div class="content-3 definitions">
+          <div class="row mt-3">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-normal">Replace missing values with Mode values</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">Mode imputation in which the missing values are replaced with the mode value or most frequent value of the entire feature column. When the data is skewed, it is good to consider using mode values for replacing the missing values.</p>
+              </div>
+          </div>
+        </div>
+        <div class="content-4 definitions">
+          <div class="row mt-3">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-normal">Replace missing values with Mean values</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">One of the techniques is mean imputation in which the missing values are replaced with the mean value of the entire feature column. In the case of fields like salary, the data may be skewed. In such cases, it may not be a good idea to use mean imputation for replacing the missing values. Note that imputing missing data with mean values can only be done with <code class="code">numerical data</code>. </p>
+              </div>
+          </div>
+        </div>
+        </div>
+       
+{% endblock %}
+
+{% block javascript %}
+ <script>
+      function myFunction() {
+        var x = document.getElementById("mySelect").value;
+        if (x == "fill") {
+          document.getElementById("fill").style.display = "block";
+          document.getElementById("replace_by").style.display = "none";
+          
+        } else if (x == "interpolate") {
+          document.getElementById("fill").style.display = "none";
+          document.getElementById("replace_by").style.display = "none";
+          
+        } else if (x == "replace") {
+          document.getElementById("fill").style.display = "none";
+          document.getElementById("replace_by").style.display = "block";
+          
+        } else {
+          document.getElementById("fill").style.display = "none";
+          document.getElementById("replace_by").style.display = "none";
+         
+        }
+      }
+
+
+      $("#fillNan").click(function () {
+        $('.fillNan').not(this).prop('checked', this.checked);
+      });
+    </script>
+
+
+
+{% endblock %}

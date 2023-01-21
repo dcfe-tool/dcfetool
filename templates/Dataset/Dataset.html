@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{fName}} - Processed</title>
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+    />
+    <!-- Google Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+    <!-- Bootstrap core CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Material Design Bootstrap -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/css/mdb.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/dataset.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}" />
+  </head>
+  <body class="p-5" style="overflow: auto; width: 100vw; height: 100vh;">
+    <!-- preloader -->
+    <div class="loader-wrapper">
+      <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <a
+        class="navbar-brand font-weight-bold font-italic text-monospace"
+        href="#"
+        >Epidemiology</a
+      >
+      {% if integrated_ds %}
+      {% else %}
+      <div>
+        <a href="/OriginalDataset/{{fName}}/" target="_blank" class="btn btn-sm btn-primary">Original Dataset</a>
+      </div>
+      {% endif %}
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="dropdown"> 
+          <div class="dropdown-menu">
+            <div
+              class="card shadow-none bg-white"
+              style="
+                width: 20rem;
+                height: 20rem;
+                overflow-y: auto;
+                overflow-x: hidden;
+              "
+            >
+          </div>
+        </div>
+      </div>
+      
+    </nav>
+    
+   
+    <nav class="mt-4" aria-label="Page navigation example">
+      {% if values.has_other_pages %}
+          <ul class="pagination justify-content-start">
+            {% if values.has_previous %}
+              <li class="page-item"><a class="page-link" tabindex="-1" href="?page={{ values.previous_page_number }}">Previous</a></li>
+            {% else %}
+              <li class="page-item disabled"><a class="page-link">Previous</a></li>
+            {% endif %}
+            {% for i in values.paginator.page_range %}
+              {% if values.number == i %}
+                <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a><span class="sr-only">(current)</span></li>
+              {% elif i > values.number|add:-5 and i < values.number|add:5 %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+            {% endfor %}
+            {% if values.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ values.next_page_number }}">Next</a></li>
+            {% else %}
+              <li class="page-item disabled"><a class="page-link">Next</a></li>
+            {% endif %}
+            <li class="page-item" style="margin-left:50%;">
+              <a class="page-link disabled">Page {{ values.number }} of {{ values.paginator.num_pages }}</a>
+            </li>
+          </ul>
+        {% else %}
+          <ul class="pagination justify-content-start">
+            <li class="page-item" style="margin-left:70%;">
+              <a class="page-link disabled">Page {{ values.number }} of {{ values.paginator.num_pages }}</a>
+            </li>
+          </ul>
+      {% endif %}
+      
+  </nav>
+
+
+ 
+    <div class="table-responsive text-nowrap" style="height:38.5rem;">
+      <!--Table-->
+      <table class="table table-striped">
+        <!--Table head-->
+        <thead class="">
+          <tr>
+            {% for col_name in clm_list%}
+            <th class="text-capitalize">{{col_name}}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <!--Table head-->
+
+        <!--Table body-->
+        <tbody>
+          {% for value in values %}
+          <tr>
+            {% for ele in value %}
+                <td scope="row">{{ele}}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+        <!--Table body-->
+      </table>
+      <!--Table-->
+    </div>
+  
+
+    <!-- jquery links -->
+    <!-- JQuery -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+    ></script>
+    <!-- Bootstrap tooltips -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"
+    ></script>
+    <!-- Bootstrap core JavaScript -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"
+    ></script>
+    <!-- MDB core JavaScript -->
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.16.0/js/mdb.min.js"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        //Preloader
+        function hidePreloader() {
+          var preloader = $(".loader-wrapper");
+          preloader.fadeOut("slow");
+        }
+        hidePreloader();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block dataset_overview %} active {% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row border border-dark rounded text-dark text-center">
+            <div class="col h2">Overview of Your Dataset</div>
+        </div>
+    </div>
+    {% if message %}
+    {% if status == 'Success' %}
+    <div
+          class="alert alert-success text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+    >
+      <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+    </div>
+    {% else %}
+    <div
+      class="alert alert-danger text-center"
+      id="msg"
+      style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+    >
+      <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+    </div>
+    {% endif %}
+    {% endif %}
+
+    <div class="container p-5">
+        <div class="row">
+        <div class="col col-12 col-md-6 col-lg-3">
+            <div class="card p-5 shadow-lg rounded content-box">
+                <div class="text-center text-white font-weight-bold bg-dark">
+                    <h4>Properties</h4>
+                </div>
+                <hr />
+                <div>
+                    <h5><span class="content-title">Filename: </span><span class="content-value "> {{fName}}</span></h5>
+                </div>
+                <div>
+                    <h5><span class="content-title">Size: </span><span class="content-value "> {{fSize}} kb</span></h5>
+                </div>
+                <div>
+                    <h5><span class="content-title">Rows:</span><span class="content-value "> {{rows}}</span></h5>
+                </div>
+                <div>
+                    <h5>
+                        <span class="content-title">Columns:</span><span class="content-value "> {{columns}}</span>
+                    </h5>
+                </div>
+                <div>
+                    <h5>
+                        <span class="content-title">
+                        Missing values:</span
+                        >
+                        <span class="content-value "> {{total_NaN}}</span>
+                    </h5>
+                </div>
+                <div>
+                    <h5>
+                        <span class="content-title"> Missing Percentage:</span>
+                        <span class="content-value "> {{NaN_percent}} %</span>
+                    </h5>
+                </div>
+                <div>
+                    <h5>
+                        <span class="content-title"> Categorical :</span>
+                        <span class="content-value "> {{categorical}}</span>
+                    </h5>
+                </div>
+                <div>
+                    <h5>
+                        <span class="content-title">Numerical :</span>
+                        <span class="content-value "> {{numerical}}</span>
+                    </h5>
+                </div>
+                <div>
+                    <h5>
+                        <span class="content-title">Date-time :</span>
+                        <span class="content-value "> {{datetime}}</span>
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div class="col col-12 col-md-6 col-lg-3">
+            <div class="card p-5 shadow-lg rounded content-box">
+            <div class="text-center text-white font-weight-bold bg-dark">
+                <h4>Categorical</h4>
+            </div>
+            <hr />
+            {% if cat_msg == "" %} {% for cat in cat_list %}
+            <ul>
+                <li class="text-capitalize">{{cat}}</li>
+            </ul>
+            {% endfor %} {% else %}
+            <div class="text-capitalize text-center mt-5 text-justify text-secondary">
+                {{cat_msg}}
+            </div>
+
+            {% endif %}
+            </div>
+        </div>
+        <div class="col col-12 col-md-6 col-lg-3">
+            <div class="card p-5 shadow-lg rounded content-box">
+            <div class="text-center text-white font-weight-bold bg-dark">
+                <h4>Numerical</h4>
+            </div>
+            <hr />
+            {% if num_msg == "" %} {% for num in num_list %}
+            <ul>
+                <li class="text-capitalize">{{num}}</li>
+            </ul>
+            {% endfor %} {% else %}
+            <div class="text-capitalize text-center text-secondary">
+                {{num_msg}}
+            </div>
+            {% endif %}
+            </div>
+        </div>
+        <div class="col col-12 col-md-6 col-lg-3">
+            <div class="card p-5 shadow-lg rounded content-box">
+            <div class="text-center text-white font-weight-bold bg-dark">
+                <h4>Date-Time</h4>
+            </div>
+            <hr />
+            {% if date_time_msg == "" %} {% for date_time_data in date_time_list %}
+            <ul>
+                <li class="text-capitalize">{{ date_time_data }}</li>
+            </ul>
+            {% endfor %} {% else %}
+            <div class="text-capitalize text-center text-secondary">
+                {{date_time_msg}}
+            </div>
+            {% endif %}
+            </div>
+        </div>
+        </div>
+
+        <!-- Main Body Content  -->
+        <!-- ================== -->
+
+        <div class="content-1 definitions">
+          <div class="row mt-5">
+              <div class="col ">
+              <div class="h4 text-info font-weight-normal"><span title="Data Curation and Feature Engineering"><span class="h3">T</span>he <span class="h3">R</span>eason <span class="h3">w</span>e <span class="h3">d</span>eveloped <span class="font-weight-bold h3">DCFE</span> <span class="font-weight-normal h3">T</span>ool</div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">Big data has been described as large, dynamic, or highly heterogeneous data that requires new forms of processing to enable enhanced decision making and insight discovery. One such field of study is <code class="code">Epidemiology of Healthcare data</code> in which there is vast availability of big data that are left unexplored and preprocessed. </p>
+                <p class="small">Many of these new forms of processing can be described as data curation, that is, the care of data to ensure that it maintains its value over time. This can be achieved by coupling the data imputation and feature engineering techniques with the <code class="code">data exploration tools</code> which will help to enrich the data quality further. </p>
+                <p class="small">We find that, the more data we need to curate for analytics and research purpose, the more costly and complex curation becomes, mostly domain experts or data scientists are not scalable. Hence, our motive is to focus on automation of data curation process using machine driven, human guided techniques to enable data curation on scale.</p>
+                <div class="h4 text-info font-weight-normal mt-3"><span class="h3">P</span>rimary <span class="h3">F</span>ocus</div>
+                <p class="small">Our primary focus is on Data Curation tool in- order to make the process of Obtaining, Exploring, Cleaning, Transforming and Visualizing data much more accessible to huge number of beneficiaries including Researchers, Data scientists, Epidemiologists, Health care professionals and various other data analysts and decision makers.</p>
+                <p class="small">In this regard we have developed the Data Curation and Feature Engineering (DCFE) tool with <code class="code">Data Imputation</code> <code class="code">Feature Engineering</code> as its key features along with <code class="code">Data Visualization</code>. The tool is accessible through online and users can readily use it by uploading datasets with file extension <code class="code">.csv</code> or <code class="code">.xlsx</code> files.</p>
+              </div>
+          </div>
+        </div>
+
+       
+        
+        
+    </div>
+    </div>
+{% endblock %}

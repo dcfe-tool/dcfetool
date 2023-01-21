@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block data_exploration %} active {% endblock %}
+{% block content %}
+   <div class="container pt-5">
+          <div class="row mt-5">
+              <div class="col col-md-12">
+                  <table class="table table-striped table-sm border border-grey rounded">
+                    <thead class="bg-dark text-white">
+                      <tr class="text-left">
+                        <th scope="col">Features</th>
+                        <th scope="col">Mean</th>
+                        <th scope="col">Median</th>
+                        <th scope="col">Standard Deviation</th>
+                        <th scope="col">Skewness</th>
+                        <th scope="col">Kurtosis</th>
+                        <th scope="col">Missing Values</th>
+                      </tr>
+                    </thead>
+                    <tbody class="">
+                    {% for col, mean, median, std, skew, kurt, nan in pack %}
+                      <tr class="text-left">
+                        <td class="font-weight-bold text-info">{{col}}</td>
+                        <td>{% if mean != '-' %} {{mean | floatformat:2 }} {% else %} {{ mean }} {% endif %}</td>
+                        <td>{% if median != '-' %} {{median | floatformat:2 }} {% else %} {{ median }} {% endif %}</td>
+                        <td>{% if std != '-' %} {{std | floatformat:2 }} {% else %} {{ std }} {% endif %}</td>
+                        <td>{% if skew != '-' %}  {{skew | floatformat:2 }} {% else %} {{ skew }} {% endif %}</td>
+                        <td>{% if kurt != '-' %}  {{kurt | floatformat:2 }} {% else %} {{ kurt }} {% endif %}</td>
+                        <td>{% if nan != '-' %}  {{nan | floatformat:2 }} {% else %} {{ nan }} {% endif %}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+              </div>
+          </div>
+         
+{% endblock  %}

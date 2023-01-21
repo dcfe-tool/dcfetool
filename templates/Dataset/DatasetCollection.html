@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block dataset-collection %} active {% endblock %}
+{% block content %}
+{% if message %}
+  {% if status == 'Success' %}
+  <div
+    class="alert alert-success text-center"
+    id="msg"
+    style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+  >
+    <span class="font-weight-bold"> {{status}} ! </span> {{message}}.<b> View or Download the newly generated dataset.</b>
+  </div>
+  {% else %}
+    <div
+    class="alert alert-danger text-center"
+    id="msg"
+    style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+  >
+    <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+  </div>
+  {% endif %}
+{% endif %}
+
+
+    <div class="container p-2 mb-3">  
+      <div class="row mt-5 font-weight-bold bg-info text-white">
+          <div class="col col-12 pb-0 mb-0 text-center font-weight-light h4">Dataset Integeration</div> 
+          <div class="col col-12 pt-3 mt-0 text-center h5">( Integerate features from other dataset )</div> 
+      </div>
+      <form class="form-group" action="/upload/{{fName}}/" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row mt-5 mb-5">
+            <div class="col col-4 bg-info border pt-3 pb-3 text-white">
+              <label class="form-control-label font-weight-light text-white">Upload Dataset ( Secondary )</label>
+              <input type="file" name="secondary_dataset" class="form-control-file" required/>
+            </div>
+            <div class="col col-4 text-center">
+                <button class="btn btn-dark text-light mt-2 mb-2">UPLOAD</button>
+            </div>
+          <div class="col col-4 bg-info border pt-3 text-white">
+            <label class="form-control-label font-weight-light text-white">Upload Dataset ( Primary )</label>
+            <input type="file" name="primary_dataset" class="form-control-file" required/>
+          </div>
+        </div>
+      </form>
+
+
+    
+    
+
+
+
+      {% if secondary_ds_clm_list and primary_ds_clm_list %}
+      <div class="row mt-4">
+          <div class="col col-3"></div>
+          <div class="col col-6 text-center">
+              <div class="form-group mt-5">
+                <label for="integrateOperation" class="font-weight-light text-danger mb-2">How do you want to Integrate ?</label>
+                <select class="form-control form-control-lg mt-0" id="integrateOperation">
+                  <option value="by_prim">By PRIMARY KEY</option>
+                  <option value="by_fea">By FEATURES</option>
+                  <option value="by_ds">By ENTIRE DATASET</option>
+                </select>
+              </div>
+              {% comment %} Downlaod  {% endcomment %}
+              {% if can_view_or_download %}
+              <div class="form-group mt-2 mb-0">
+                <a href="/IntegratedDataset/new_dataset/" target="_blank" class="btn btn-sm btn-success rounded-0">VIEW</a> 
+                <a href="/IntegratedDatasetDownload/new_dataset/" class="btn btn-sm btn-success rounded-0">DOWNLOAD</a>
+              </div>
+              {% endif %}
+          </div>
+          <div class="col col-3"></div>
+      </div>
+      {% endif %}
+
+
+      {% comment %} Integrate by Primary Keys {% endcomment %}
+      {% if length_of_primary_keys > 0 %}
+      <div class="row mt-2 mb-5" id="integrate_by_primary_key_div">
+          <div class="col col-3"></div>
+          <div class="col col-6 text-left">
+             <form class="mt-2" method="POST" action="/integrate/">
+             {% csrf_token %}
+              {% for prim_key in primary_keys %}
+              <div class="form-check">
+                <input type="checkbox" name="selectedPrimaryKey" value="{{ prim_key }}" class="form-check-input primaryKeySelect" id="{{ prim_key }}">
+                <label class="form-check-label pl-5" for="exampleCheck1">{{ prim_key }}</label>
+                <input type="hidden" value="prim" name="joinType" />
+                <input type="hidden" value="{{fName}}" name="fName" />
+                <input type="hidden" value="{{secondary_ds_name}}" name="secondary_ds_name" />
+                <input type="hidden" value="{{primary_ds_name}}" name="primary_ds_name" />
+              </div>
+              {% endfor %}
+              <button class="btn btn-primary text-light mt-5 text-center">Integrate <i class="fa fa-arrow-right"></i></button>
+            </form>
+          </div>
+          <div class="col col-3"></div>
+      </div>
+      {% elif length_of_primary_keys == 0 %}
+      <div class="row mt-5 mb-5" id="integrate_by_primary_key_div">
+        <div class="col col-12 text-center p-3">
+            <h5 class="text-info font-weight-light">No Common Features are exists in the given datasets.</h5>
+        </div>
+      </div>
+    {% else %}
+    {% endif %}
+
+
+      {% comment %} Integrate by Features  {% endcomment %}
+        {% if secondary_ds_clm_list and primary_ds_clm_list %}
+        <form class="mt-4" method="POST" action="/integrate/">
+        {% csrf_token %}
+        <div class="row mt-5 mb-5 d-none" id="integrate_by_feature_div">
+          <div class="col col-4 bg-light border pt-3 pb-3 text-dark">
+            <div class="font-weight-bold text-dark text-center text-capitalize border-bottom">{{secondary_ds_name}}</div>
+              <div class="form-check mt-3">
+                <input type="checkbox" id="secondarySelect" class="form-check-input">
+                <label class="form-check-label text-capitalize small text-dark pl-4 pt-1 pb-2">Check All</label>
+              </div>
+              {% for sec_clm in secondary_ds_clm_list %}
+              <div class="form-check">
+                <input type="checkbox"  name="selectedFeatures" value="{{ sec_clm }}" class="form-check-input secondarySelect" id="{{ sec_clm }}">
+                <label class="form-check-label pl-5" for="exampleCheck1">{{ sec_clm }}</label>
+                <input type="hidden" value="fea" name="joinType" />
+                <input type="hidden" value="{{fName}}" name="fName" />
+                <input type="hidden" value="{{secondary_ds_name}}" name="secondary_ds_name" />
+                <input type="hidden" value="{{primary_ds_name}}" name="primary_ds_name" />
+              </div>
+              {% endfor %}
+          </div>
+          <div class="col col-4 text-center pt-5">
+              <button class="btn btn-primary text-light mt-5">Integrate <i class="fa fa-arrow-right"></i></button>
+          </div>
+          <div class="col col-4 bg-light border pt-3 pb-3 text-dark">
+            <div class="font-weight-bold text-dark text-center text-capitalize border-bottom">{{primary_ds_name}}</div>
+              {% for prim_clm in primary_ds_clm_list %}
+              <div class="form-check">
+                <label class="form-check-label pl-5" for="exampleCheck1">-</label>
+                <label class="form-check-label pl-5" for="exampleCheck1">{{ prim_clm }}</label>
+              </div>
+              {% endfor %}
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    {% endif %}
+
+
+     {% comment %} Integrate by Dataset {% endcomment %}
+      {% if secondary_ds_clm_list and primary_ds_clm_list %}
+      <form class="mt-4" method="POST" action="/integrate/">
+      {% csrf_token %}
+      <div class="row mt-2 d-none pb-0" id="integrate_by_ds_div">
+        <div class="col col-md-5 mr-3"></div>
+          <div class="col text-left mt-0 mb-0 ml-5 pl-5">
+              <button class="btn btn-primary text-light text-center mt-0">Merge Two Datasets</button>
+              <div class="form-group mb-0 mt-0">
+                <input type="hidden" value="ds" name="joinType" />
+                <input type="hidden" value="{{fName}}" name="fName" />
+                <input type="hidden" value="{{secondary_ds_name}}" name="secondary_ds_name" />
+                <input type="hidden" value="{{primary_ds_name}}" name="primary_ds_name" />
+              </div>
+          </div>
+      </div>
+      </form>
+      {% endif %}
+
+
+  
+
+
+   
+
+    {% comment %} Download Dataset From Outside Source {% endcomment %}
+
+    <div class="container p-5 mt-5 border border-dark">  
+      <div class="row font-weight-bold">
+          <div class="col col-12 text-center text-dark h4">Download Dataset From External Source</div> 
+      </div>
+      <div class="row mt-5">
+          <div class="col col-6">
+              <h5 class="text-center text-dark font-weight-light"><span class="text-danger">National Dataset</span></h5>
+          </div>
+          <div class="col col-6">
+              <h5 class="text-center text-dark font-weight-light"><span class="text-danger">International Dataset</span></h5>
+          </div>
+      </div>
+      <div class="row mt-5">
+          <div class="col col-6">
+              <table class="table table-striped table-sm border border-dark rounded">
+              <thead class="bg-dark text-white">
+                <tr class="small text-left">
+                  <th scope="col">#</th>
+                  <th scope="col text-center">Useful Links</th>
+                </tr>
+              </thead>
+              <tbody class="small">
+                <tr class="text-left">
+                  <td class="font-weight-bold text-info">1</td>
+                  <td><a href="http://www.data.gov.in/" target="_blank"><i class="fa fa-link fa-sm"></i> https://www.data.gov.in/</a></td>
+                </tr>
+                <tr class="text-left">
+                  <td class="font-weight-bold text-info">2</td>
+                  <td><a href="https://www.kemhrcvadu.org/index.php/" target="_blank"><i class="fa fa-link fa-sm"></i> https://www.kemhrcvadu.org/index.php/</a></td>
+                </tr>
+                <tr class="text-left">
+                  <td class="font-weight-bold text-info">3</td>
+                  <td><a href="https://archive.ics.uci.edu/ml/datasets.php" target="_blank"><i class="fa fa-link fa-sm"></i> https://archive.ics.uci.edu/ml/datasets.php</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        
+          <div class="col col-6">
+              <table class="table table-striped table-sm border border-dark rounded">
+              <thead class="bg-dark text-white">
+                <tr class="small text-left">
+                  <th scope="col">#</th>
+                  <th scope="col">Useful Links</th>
+                </tr>
+              </thead>
+              <tbody class="small">
+                <tr class="text-left">
+                  <td class="font-weight-bold text-info">1</td>
+                  <td><a href="https://www.dataone.org/" target="_blank"><i class="fa fa-link fa-sm"></i> https://www.dataone.org/</a></td>
+                </tr>
+                <tr class="text-left">
+                  <td class="font-weight-bold text-info">2</td>
+                  <td><a href="https://data.ny.gov/" target="_blank"><i class="fa fa-link fa-sm"></i> https://data.ny.gov/</a></td>
+                </tr>
+                <tr class="text-left">
+                  <td class="font-weight-bold text-info">3</td>
+                  <td><a href="http://databib.org/" target="_blank"><i class="fa fa-link fa-sm"></i> https://databib.org/</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+       
+       
+ 
+{% endblock  %}
+
+{% block javascript %}
+ <script>
+    $("#secondarySelect").click(function () {
+      $('.secondarySelect').not(this).prop('checked', this.checked);
+    });
+
+
+    $("#integrateOperation").change(function () {
+      join_selected_option = $("#integrateOperation").find(":selected").val();
+      if(join_selected_option === "by_fea"){
+        $("#integrate_by_feature_div").removeClass('row mt-5 mb-3 d-none')
+        $("#integrate_by_feature_div").addClass('row mt-5 mb-3')
+        $("#integrate_by_primary_key_div").addClass('row mt-5 mb-3 d-none')
+        $("#integrate_by_ds_div").addClass('row mt-5 mb-3 d-none')
+      }else if(join_selected_option === "by_ds"){
+        $("#integrate_by_ds_div").removeClass('row mt-5 mb-3 d-none')
+        $("#integrate_by_ds_div").addClass('row mt-5 mb-3')
+        $("#integrate_by_feature_div").addClass('row mt-5 mb-3 d-none')
+        $("#integrate_by_primary_key_div").addClass('row mt-5 mb-3 d-none')
+      }else{
+        $("#integrate_by_primary_key_div").removeClass('row mt-5 mb-3 d-none')
+        $("#integrate_by_primary_key_div").addClass('row mt-5 mb-3')
+        $("#integrate_by_feature_div").addClass('row mt-5 mb-3 d-none')
+        $("#integrate_by_ds_div").addClass('row mt-5 mb-3 d-none')
+      }
+    });
+
+
+
+
+  </script>
+{% endblock %}

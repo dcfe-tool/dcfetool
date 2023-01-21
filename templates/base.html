@@ -1,0 +1,502 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DCFE Tool</title>
+
+    <!-- cdn links -->
+    <link
+      href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+  
+
+
+    <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+
+    <!-- Plotly -->
+    <script src="/static/js/plotly-latest.min.js"></script>
+
+
+    <!-- font awesome icon links -->
+    <link
+      href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/preloader.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/visualization.css' %}" />
+
+
+  </head>
+
+  <body>
+
+
+     <!-- preloader -->
+    {% comment %} <div class="loader-wrapper">
+      <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+      {% endcomment %}
+
+
+    <div class="container" >
+      <div class="row">
+          <div class="col col-1 col-md-1">
+               <!-- Sidebar -->
+              <div class="border-right bg-dark text-white" id="sidebar-wrapper">
+                <div class="sidebar-heading text-white"><a href="/" class="text-decoration-none text-white">DCFE Tool<a></div>
+                <div class="nav-side-menu">
+                  <div class="menu-list">
+                    <ul id="menu-content" class="menu-content collapse out">
+                      <li>
+                        <a href="/Dataset/{{fName}}/" target="_blank"
+                          ><i class="fa fa-table fa-sm"></i> Dataset
+                        </a>
+                      </li>
+                      <li class="{% block dataset_overview %} {% endblock %}">
+                        <a href="/Home/{{fName}}/">
+                          <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                          Dataset Overview
+                        </a>
+                      </li>
+
+                      <li class="{% block data_exploration %} {% endblock %}">
+                        <a href="/Explore/{{fName}}/"
+                          ><i class="fa fa-table fa-sm"></i> Data Exploration
+                        </a>
+                      </li>
+                        <li class="{% block remove_unwanted_features %} {% endblock %}">
+                        <a href="/removeUnwantedFeatures/{{fName}}/"
+                          ><i class="fa fa-trash fa-sm"></i> Remove Unwanted Features
+                        </a>
+                      </li>
+                      <li
+                        data-toggle="collapse"
+                        data-target="#service"
+                        class="collapsed"
+                      >
+                        <a
+                          ><i class="fa fa-edit fa-sm"></i> Data Imputation
+                          <span class="arrow"></span
+                        ></a>
+                      </li>
+                      <ul class="sub-menu collapse" id="service">
+                        <li class="{% block complete_drop_nan %} {% endblock %}">
+                          <a data-toggle="modal" data-target="#myModal"
+                          >Complete Drop NaN</a>
+                        </li>
+                        <li class="{% block attr_drop_nan %} {% endblock %}"><a href="/AttrDropNan/{{fName}}/"> Attribute Wise Drop NaN</a></li>
+                        <li class="{% block attr_fill_nan %} {% endblock %}"><a href="/AttrFillNan/{{fName}}/"> Attribute Wise Fill NaN</a></li>
+                        <li> <a data-toggle="modal" data-target="#knnModal"
+                          >KNN Imputation</a></li>
+                        {% comment %} <li data-toggle="collapse" data-target="#testing_link" class="collapsed">
+                          <a href="#">Iterative Imputation<span class="arrow"></span></a>
+                        </li> {% endcomment %}
+                        <ul class="sub-menu" id="testing_link">
+                            <div class="pl-5">Iterative Imputation</div>
+                            <li><a data-toggle="modal" data-target="#iterativeModal"> Bayesian Ridge</a></li>
+                            <li><a data-toggle="modal" data-target="#iterativeDecTreeRegModal"> Decision Tree</a></li>
+                            <li><a data-toggle="modal" data-target="#iterativeExtraTreeRegModal"> Extra Tree Regressor</a></li>
+                        </ul>
+                      </ul>
+
+                      <li data-toggle="collapse" data-target="#new" class="collapsed">
+                        <a href="#"
+                          ><i class="fa fa-cogs fa-sm"></i> Feature Engineering
+                          <span class="arrow"></span
+                        ></a>
+                      </li>
+                      <ul class="sub-menu collapse" id="new">
+                        <div class="pl-5">Numerical</div>
+                        <li class="{% block binning %} {% endblock %}"><a href="/Binning/{{fName}}/"> Binning</a></li>
+                        <li class="{% block normalization %} {% endblock %}"><a href="/Normalization/{{fName}}/"> Normalization</a></li>
+                        <li class="{% block log-transform %} {% endblock %}"><a href="/LogTransform/{{fName}}/"> Log Transform</a></li>
+                        <div class="pl-5">Categorical</div>
+                        <li class="{% block count-freq %} {% endblock %}"><a href="/CountFrequencyEncoding/{{fName}}/"> Count Frequency Encoding</a></li>
+                        <li class="{% block binary-encode %} {% endblock %}"><a href="/BinaryEncoding/{{fName}}/"> Binary Encoding</a></li>
+                        <li class="{% block label-encode %} {% endblock %}"><a href="/LabelEncoding/{{fName}}/"> Label Encoding</a></li>
+                        <li class="{% block one-hot-encode %} {% endblock %}"><a href="/OneHotEncoding/{{fName}}/"> One Hot Encoding</a></li>
+                        <li class="{% block ordinal-encode %} {% endblock %}"><a href="/OrdinalEncoding/{{fName}}/"> Ordinal Encoding</a></li>
+                        <div class="pl-5">New Feature</div>
+                        <li class="{% block new-feature-generate %} {% endblock %}"><a href="/NewFeature/{{fName}}/"> Generate New Feature</a></li>
+                      </ul>
+                      <li>
+                        <a href="/Visualize/{{fName}}/">
+                          <i class="fa fa-bar-chart fa-sm"></i> Visualization
+                        </a>
+                      </li>
+                      
+                      <li data-toggle="collapse" data-target="#download" class="collapsed">
+                        <a href="#"
+                          ><i class="fa fa-download fa-sm"></i> Download Dataset
+                          <span class="arrow"></span
+                        ></a>
+                      </li>
+
+                    <ul class="sub-menu collapse" id="download">
+                        <li><a href="/DownloadOriginal/{{fName}}/"> Original</a></li>
+                        <li><a href="/DownloadProcessed/{{fName}}/"> Processed</a></li>
+                        <li><a href="/ExternalDataset/{{fName}}/"> Dataset Integration</a></li>
+                    </ul>
+
+                      <li>
+                        <a href="/">
+                          <i class="fa fa-home fa-sm"></i> Home
+                        </a>
+                      </li>
+                      <li style="margin-top:15%;"></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li>
+                        {% if undo_count > 0 %}
+                        <a href="/Undo/{{fName}}">
+                          <i class="fa fa-undo" aria-hidden="true"></i>Undo <span class="text-muted pl-2 text-right">Actions taken : {{undo_count}}</span>
+                        </a>
+                        {% else %}
+                        <a>
+                          <i class="fa fa-undo text-muted" aria-hidden="true"></i><span class="text-muted pl-2 text-right">No Actions taken</span>
+                        </a>
+                        {% endif %}
+                      </li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      <li></li>
+                      
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- Sidebar -->
+          </div>
+     
+        <div class="col col-11 col-md-11">
+          <!-- Page Content Starts-->
+          <div class="row mt-5 mb-5">
+            <div class="col col-md-12">
+            
+            {% block content %}
+            {% endblock  %}
+            </div>
+          </div>
+          <!-- Page Content Ends-->
+        </div>
+      </div>
+    </div>
+
+<!-- Modals starts -->
+    
+    <!-- getting permission here to drop the columns -->
+
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="alert-heading">
+              <h4
+                class="modal-title text-danger font-weight-bold h5"
+                id="myModalLabel"
+              >
+                <i
+                class="fa fa-hand-o-down text-danger font-weight-bold"
+                aria-hidden="true"
+              ></i> Read Carefully
+              </h4>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="drop-rules mt-1">
+               {% if NaN_percent != 0 and NaN_percent > 0 %}
+              <p>
+                Your dataset having
+                <code class="code">{{NaN_percent}}%</code> of NaN
+                values.
+              </p>
+             
+              <p>
+                {% comment %} <span class=" font-weight-bold">As per the Rule</span> {% endcomment %}
+                <ul>
+                  <li>The NaN values of your dataset should be <code class="code"> <= 15%</code> then only your
+                  dataset is eligible to drop the NaN.</li>
+                </ul>
+              </p>
+              {% else %}
+              <p>
+                Your dataset having
+                <span class="font-weight-bold">0</span> NaN
+                values.
+              </p>
+               <p>
+                <span class=" font-weight-bold">You need not to do this operation.</span>
+              </p>
+              {% endif %}
+              {% if NaN_percent != 0 and NaN_percent > 0 %}
+              <p class="font-weight-bold mt-5">Note:</p>
+              <p>You lose your data while dropping all the NaN values, If your dataset contains <code class="code"> >= 15% </code> NaN values.</p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+              Close
+            </button>
+            {% if NaN_percent != 0 and NaN_percent <= 15 %}
+            <a
+              type="button"
+              style="margin-top: 0%;"
+              href="/CompleteDropNan/{{fName}}/"
+              class="btn btn-success"
+              >Proceed</a
+            >
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Iterative Extra Tree Reg Imputation -->
+
+    <div class="modal fade" id="iterativeExtraTreeRegModal" tabindex="-1" role="dialog" aria-labelledby="iterativeExtraTreeRegModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <div class="alert-heading">
+              <h4 class="modal-title text-danger font-weight-bold h5" id="iterativeExtraTreeRegLabel">
+                <i class="fa fa-hand-o-down text-danger font-weight-bold" aria-hidden="true"></i> Read Carefully
+              </h4>
+            </div>
+        </div>
+        <div class="modal-body">
+          <div class="drop-rules mt-1">
+                <p>
+                <li>Extra Trees is an ensemble machine learning algorithm that combines the predictions from many decision trees.
+
+It is related to the widely used random forest algorithm. It can often achieve as-good or better performance than the random forest algorithm, although it uses a simpler algorithm to construct the decision trees used as members of the ensemble.</li>
+                </p>
+              
+                <p>
+                  <li>Iterative Imputation (Extra Tree) : Approach to imputing missing values.</li>
+                </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <a
+              type="button"
+              style="margin-top: 0%;"
+              href="/Iterative_Imputer_ExtraTreesRegressor/{{fName}}/"
+              class="btn btn-success"
+              >Proceed</a
+            >
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Iterative Decision Tree Reg Imputation -->
+
+    <div class="modal fade" id="iterativeDecTreeRegModal" tabindex="-1" role="dialog" aria-labelledby="iterativeDecTreeRegModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <div class="alert-heading">
+              <h4 class="modal-title text-danger font-weight-bold h5" id="iterativeDecTreeRegLabel">
+                <i class="fa fa-hand-o-down text-danger font-weight-bold" aria-hidden="true"></i> Read Carefully
+              </h4>
+            </div>
+        </div>
+        <div class="modal-body">
+          <div class="drop-rules mt-1">
+                <p>
+                <li>Decision tree regression observes features of an object and trains a model in the structure of a tree to predict data in the future to produce meaningful continuous output. Continuous output means that the output/result is not discrete, i.e., it is not represented just by a discrete, known set of numbers or values.</li>
+                </p>
+              
+                <p>
+                  <li>Iterative Imputation (Decision Tree) : Approach to imputing missing values.</li>
+                </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <a
+              type="button"
+              style="margin-top: 0%;"
+              href="/Iterative_Imputer_DecTreeReg/{{fName}}/"
+              class="btn btn-success"
+              >Proceed</a
+            >
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Iterative Imputation -->
+
+    <div class="modal fade" id="iterativeModal" tabindex="-1" role="dialog" aria-labelledby="iterativeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+            <div class="alert-heading">
+              <h4 class="modal-title text-danger font-weight-bold h5" id="iterativeLabel">
+                <i class="fa fa-hand-o-down text-danger font-weight-bold" aria-hidden="true"></i> Read Carefully
+              </h4>
+            </div>
+        </div>
+        <div class="modal-body">
+          <div class="drop-rules mt-1">
+                <p>
+                <li>Iterative imputation refers to a process where each feature is modeled as a function of the other features, e.g. a regression problem where missing values are predicted. Each feature is imputed sequentially, one after the other, allowing prior imputed values to be used as part of a model in predicting subsequent features.</li>
+                </p>
+              
+                <p>
+                  <li>Iterative Imputation : Approach to imputing missing values.</li>
+                </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+          <a
+              type="button"
+              style="margin-top: 0%;"
+              href="/IterativeImputation/{{fName}}/"
+              class="btn btn-success"
+              >Proceed</a
+            >
+        </div>
+      </div>
+    </div>
+    </div>
+
+
+    <!-- KNN Imputation -->
+
+    <div
+      class="modal fade"
+      id="knnModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <div class="alert-heading">
+              <h4
+                class="modal-title text-danger font-weight-bold h5"
+                id="myModalLabel"
+              >
+                <i
+                class="fa fa-hand-o-down text-danger font-weight-bold"
+                aria-hidden="true"
+              ></i> Read Carefully
+              </h4>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="drop-rules mt-1">
+              <p>
+               <li>KNN Imputor for missing values using k-Nearest Neighbors. 
+                Each sample's missing values are imputed using the mean value from n_neighbors nearest neighbors found in the training set. 
+                Two samples are close if the features that neither is missing are close.</li>
+              </p>
+             
+              <p>
+                <li>KNN-Imputation performs only on numerical datasets.</li>
+              </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">
+              Close
+            </button>
+            <a
+              type="button"
+              style="margin-top: 0%;"
+              href="/KNNImputation/{{fName}}/"
+              class="btn btn-success"
+              >Proceed</a
+            >
+          </div>
+      </div>
+    </div>
+    </div>
+
+<!-- Modals ends -->
+
+
+    <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+      rel="stylesheet"
+      id="bootstrap-css"
+    />
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="/static/js/init.js"></script>
+
+
+    <!-- Menu Toggle Script -->
+    <script>
+       // tooltip
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+      
+      // For toggling the dropdowns
+      $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+      });
+
+      // to displaying alert messages
+
+      setTimeout(function () {
+        if ($("#msg").length > 0) {
+          $("#msg").remove();
+        }
+      }, 5000);
+
+
+    // preloader
+      $(document).ready(function () {
+        //Preloader
+        function hidePreloader() {
+          var preloader = $(".loader-wrapper");
+          preloader.fadeOut("slow");
+        }
+        hidePreloader();
+      });
+    </script>
+
+    {% block javascript %}
+    {% endblock %}
+
+   
+  </body>
+</html>

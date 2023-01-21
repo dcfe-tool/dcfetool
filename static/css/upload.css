@@ -1,0 +1,16 @@
+.alerts-border {
+    border: 2px solid white;
+    animation: blink 1s;
+    animation-iteration-count: infinite;
+}
+
+.alerts-border:hover {
+    color: white;
+    background-color: #343A40 !important;
+}
+
+@keyframes blink {
+    50% {
+        border-color: #3CA936;
+    }
+}

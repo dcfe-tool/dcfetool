@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block attr_drop_nan %} active {% endblock %}
+{% block content %}
+{% if message %}
+        {% if status == 'Success' %}
+        <div
+          class="alert alert-success text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% else %}
+         <div
+          class="alert alert-danger text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="container p-3">
+        <div class="col-12 p-2"><a href="/AttrDropNan/{{fName}}/"><i class="fa fa-refresh" aria-hidden="true"></i></a></div>
+
+        <div class="card attrDropCard pt-3 pb-3 pl-5 bg-light">
+          <span 
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  id="tooltip"
+                  title="Disabled features are inelligible"
+                  ><i
+                    class="fa fa-info-circle text-info"
+                    aria-hidden="true"
+                  ></i
+          ></span>
+          <div class="mr-5 text-center text-primary font-weight-bold h4">
+              Select Features to Drop NaN Values
+          </div>
+          <div class="form-check col-6 mt-2">
+            <input type="checkbox" id="dropNanVal" class="form-check-input">
+            <label class="form-check-label text-capitalize small text-dark pl-4 pt-1">Check All</label>
+          </div>
+          <form
+              class="form-group mt-5"
+              action="/AttrDropNanCalc/{{fName}}/"
+              method="POST"
+              id="form1"
+              enctype="multipart/form-data"
+            >
+            {% csrf_token %}
+           
+            <div class="row">
+
+                {% for clm,percent in attr_drop_list %}
+                <div class="form-check col-6">
+                  {% if percent != 0 and percent < 15 %}
+                  <input type="checkbox"  name="attrDropCols" value="{{clm}}" class="form-check-input ml-5 col attrDropCols">
+                  <label class="form-check-label col-6 text-capitalize" for="attrDropCol">{{clm}} (<span class="text-danger"> {{percent}} %</span> )</>
+                  {% else %}
+                  <input type="checkbox" disabled  class="form-check-input ml-5 col">
+                  <label class="form-check-label col-6 text-capitalize" >{{clm}} (<span class="text-danger"> {{percent}} %</span> )</>
+                  {% endif %}
+
+                </div>
+                {% endfor %}
+            </div>
+          
+            <div class="row mt-5">
+              <div class="col-md-9"></div>
+              
+              <div class="col-md-1">
+                <button  class="btn btn-primary"
+                  >Drop</button
+                >
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="content-1 definitions mb-3">
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">If a feature or attribute has missing value <code class="code">less than 15%</code> then the NaN in that feature can be dropped completely.</p>
+              </div>
+          </div>
+        </div>
+
+        </div>
+
+        <div class="container p-3">
+           <div class="card attrDropCompleteCard pt-3 pb-3 pl-5 bg-light">
+            <span 
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    id="tooltip"
+                    title="Drop entire column"
+                    ><i
+                      class="fa fa-info-circle text-info"
+                      aria-hidden="true"
+                    ></i
+            ></span>
+            <div class="mr-5 text-center text-primary font-weight-bold h4">
+                  Select NaN Value Features to Drop 
+            </div>
+            <div class="form-check col-6 mt-2">
+              <input type="checkbox" id="dropNanCol" class="form-check-input">
+              <label class="form-check-label text-capitalize small text-dark pl-4 pt-1">Check All</label>
+            </div>
+           <form
+                class="form-group mt-5"
+                action="/AttrDropColCalc/{{fName}}/"
+                method="POST"
+                id="form2"
+                enctype="multipart/form-data"
+              >
+              {% csrf_token %}
+              <div class="row">
+                {% for clm,percent in attr_drop_col_list %}
+                  <div class="form-check col-6">
+                    {% if percent > 50 %}
+                    <input type="checkbox" name="attrDropCompleteCols" value="{{clm}}" class="form-check-input ml-5 col dropNanCol">
+                    <label class="form-check-label col-6 text-capitalize" for="attrDropCompleteCols">{{clm}} (<span class="text-danger"> {{percent}} %</span> )</>
+                    {% else %}
+                    <input type="checkbox" disabled  class="form-check-input ml-5 col">
+                    <label class="form-check-label col-6 text-capitalize" >{{clm}} (<span class="text-danger"> {{percent}} %</span> )</>
+                    {% endif %}
+
+                  </div>
+                  {% endfor %}
+              </div>
+            
+              <div class="row mt-5">
+                <div class="col-md-9"></div>
+               
+                <div class="col-md-1">
+                  <button id="dropColumn" class="btn btn-primary"
+                    >Drop</button
+                  >
+                </div>
+              </div>
+            <!-- </form> -->
+          </div>
+          <div class="content-1 definitions mb-3">
+          <div class="row">
+              <div class="col col-md-12">
+                <p class="small">Feature or attribute have missing value <code class="code">greater than 50%</code> feature can be deleted from the dataset.</p>
+              </div>
+          </div>
+        </div>
+
+        </div>
+{% endblock %}
+
+
+{% block javascript %}
+
+<script>
+$("#dropNanVal").click(function () {
+     $('.attrDropCols').not(this).prop('checked', this.checked);
+ });
+
+ $("#dropNanCol").click(function () {
+     $('.dropNanCol').not(this).prop('checked', this.checked);
+ });
+</script>
+
+{% endblock %}

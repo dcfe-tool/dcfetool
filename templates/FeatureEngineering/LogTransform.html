@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block log-transform %} active {% endblock %}
+{% block content %} 
+  {% if message %}
+  {% if status == 'Success' %}
+  <div
+    class="alert alert-success text-center"
+    id="msg"
+    style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+  >
+    <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+  </div>
+  {% else %}
+    <div
+    class="alert alert-danger text-center"
+    id="msg"
+    style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+  >
+    <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+  </div>
+  {% endif %}
+  {% endif %}
+
+  <div class="container p-3">
+          
+          <div class="card attrDropCard pt-3 pb-3 pl-5 bg-light">
+             <span 
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    id="tooltip"
+                    title="Binning performs only on Numerical Features"
+                    ><i
+                      class="fa fa-info-circle text-info"
+                      aria-hidden="true"
+                    ></i
+                  ></span>
+            <div class="mr-5 text-center text-primary font-weight-bold h4">
+              Select Features for Log Transform
+            </div>
+            <div class="form-check mt-3">
+              <input type="checkbox" id="logSelect" class="form-check-input">
+              <label class="form-check-label text-capitalize small text-dark pl-4 pt-1">Check All</label>
+            </div>
+            <form
+                class="form-group mt-5"
+                action="/LogTransformCalc/{{fName}}/"
+                method="POST"
+                id="logForm"
+                enctype="multipart/form-data"
+            >
+              {% csrf_token %}
+              <div class="row">
+                {% for clm in log_list %}
+                  <div class="form-check col-6">
+                    <input type="checkbox" name="logCol" value="{{clm}}" class="form-check-input ml-5 col logSelect">
+                    <label class="form-check-label col-6 text-capitalize" for="logCol">{{clm}}</>
+                  </div>
+                {% endfor %}
+              </div>
+            
+              <div class="row mt-5">
+                  <div class="col-md-9"></div>
+                  
+                  <div class="col-md-1">
+                  <button  class="btn btn-primary"
+                      >Proceed</button
+                  >
+                  </div>
+              </div>
+            </form>
+          </div>
+  </div>
+  
+  <div class="content-1 definitions">
+    <div class="row mt-5">
+              <div class="col ">
+              <div class="h4 text-danger font-weight-bold">Log Transform</div>
+              </div>
+          </div>
+    <div class="row">
+        <div class="col col-md-12">
+          <p class="small">Log transformation is a data transformation method in which it replaces each variable X with a log(X). The choice of the logarithm base is usually left up to the analyst and it would depend on the purposes of statistical modeling.</p>
+        </div>
+    </div>
+  </div>
+      
+{% endblock  %}
+
+
+
+{% block javascript %}
+ <script>
+      $("#logSelect").click(function () {
+        $('.logSelect').not(this).prop('checked', this.checked);
+      });
+    </script>
+{% endblock %}

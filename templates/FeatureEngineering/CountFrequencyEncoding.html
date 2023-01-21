@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block count-freq %} active {% endblock %}
+{% block content %}
+{% if message %}
+  {% if status == 'Success' %}
+  <div
+    class="alert alert-success text-center"
+    id="msg"
+    style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+  >
+    <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+  </div>
+  {% else %}
+    <div
+    class="alert alert-danger text-center"
+    id="msg"
+    style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+  >
+    <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+  </div>
+  {% endif %}
+  {% endif %}
+
+  <div class="container p-3">
+    
+    <div class="card attrDropCard pt-3 pb-3 pl-5 bg-light">
+        <span 
+              data-toggle="tooltip"
+              data-placement="top"
+              id="tooltip"
+              title="Count Frequency Encoding performs on all Features"
+              ><i
+                class="fa fa-info-circle text-info"
+                aria-hidden="true"
+              ></i
+            ></span>
+      <div class="mr-5 text-center text-primary font-weight-bold h4">
+            Select Features for Count Frequency Encode
+          </div>
+      {% if NaN_percent == 0 %}
+        <div class="form-check mt-3">
+          <input type="checkbox" id="cfSelect" class="form-check-input">
+          <label class="form-check-label text-capitalize small text-dark pl-4 pt-1">Check All</label>
+        </div>
+      <form
+          class="form-group mt-5"
+          action="/CountFrequencyEncodingCalc/{{fName}}/"
+          method="POST"
+          id="cfencodingForm"
+          enctype="multipart/form-data"
+      >
+      {% csrf_token %}
+      
+      {% if cf_processing_list %}
+      <div class="row">
+      {% for clm in cf_processing_list %}
+        <div class="form-check col-6">
+          {% if NaN_percent == 0 %}
+          <input type="checkbox" name="CFCol" value="{{clm}}" class="form-check-input ml-5 col cfSelect">
+          <label class="form-check-label col-6 text-capitalize" for="CFCol">{{clm}}</>
+          {% else %}
+          <input hidden type="checkbox" disabled value="" class="form-check-input ml-5 col">
+          <label hidden class="form-check-label col-6 text-capitalize"></>
+          {% endif %}
+        </div>
+      {% endfor %}
+      </div>
+      <div class="row mt-5">
+          <div class="col-md-9"></div>
+          
+          <div class="col-md-1">
+          <button  class="btn btn-primary"
+              >Proceed</button
+          >
+          </div>
+      </div>
+      {% else %}
+      <div class="row mt-5">
+        <div class="col mr-5 mt-5">
+          <h5 class="alert alert-danger text-center">No Features Are Exits</h5>
+      </div>
+      </div>
+      {% endif %}
+      
+      </form>
+      {% else%}
+      <div class="mr-5 mt-5">
+          <h5 class="alert alert-danger text-center">Your Dataset Have NaN Values</h5>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% if cf_processed_list %}
+  <div class="container p-3">
+      <div class="card attrDropCard pt-3 pb-3 pl-5 bg-light">
+    <div class="row">
+      <h5 class="text-primary font-weight-bold">Count Frequency Encoded Features:</h5>
+    </div>
+    <div class="row">
+      {% for col in cf_processed_list %}
+      <div class="col-3 mt-2">
+        <label class="form-check-label text-capitalize">{{col}}</>
+      </div>
+        {% endfor %}
+      </div>
+  </div>
+  </div>
+  {% endif %}
+  <div class="content-1 definitions">
+      <div class="row mt-5">
+          <div class="col ">
+          <div class="h4 text-danger font-weight-bold">Count Frequency Encoding</div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col col-md-12">
+            <p class="small">Replace the categories by the count of the observations that show that category in the dataset. Similarly, we can replace the category by the frequency -or percentage- of observations in the dataset. That is, if 10 of our 100 observations show the color blue, we would replace blue by 10 if doing count encoding, or by 0.1 if replacing by the frequency.</p>
+          </div>
+      </div>
+    </div>
+{% endblock  %}
+
+
+{% block javascript %}
+ <script>
+      $("#cfSelect").click(function () {
+        $('.cfSelect').not(this).prop('checked', this.checked);
+      });
+    </script>
+{% endblock %}

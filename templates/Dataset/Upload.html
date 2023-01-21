@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DCFE Tool</title>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/upload.css' %}" />
+    
+  </head>
+
+  <body>
+
+  
+     
+
+
+    <!-- Image and text -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-white mb-0" style="position:sticky; top:0; z-index: 1;">
+      <div class="text-dark" title="Department of Science and Technology"><span class="h5 font-weight-bold"><img id="logo-disbug-img" class="w-75"  src="{% static 'images/DST.jpg' %}" /></span><br><span class="small pl-1 text-uppercase font-weight-bold pt-0 mt-0" style="color: #283583">Interdisciplinary Cyber Physical Systems<span></div>
+      <a class="text-dark text-center mt-1"  style="text-decoration: none; display: block; margin-left: 5%; margin-right: auto; width: 35%;" href="/" title="Data Curation and Feature Engineering"><span class="h5 font-weight-bold pl-5 ml-5"><img id="logo-disbug-img" class="w-25 mt-1"  src="{% static 'images/main_logo.png' %}" /><span style="color: #2C5871">DCFE</span></span></a>
+      <div class="ml-auto text-light mr-0 pr-0"  title="National Institute of Technology, Trichy"><img class="w-25 float-right" src="{% static 'images/NITT_logo.png' %}" alt=""></div>
+    </nav>
+     {% if message %}
+        {% if status == 'Success' %}
+        <div
+          class="alert alert-success text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% else %}
+         <div
+          class="alert alert-danger text-center"
+          id="msg"
+          style="margin-left: 10%; margin-top: 2%; margin-right: 5%;"
+        >
+          <span class="font-weight-bold"> {{status}} ! </span> {{message}}
+        </div>
+        {% endif %}
+        {% endif %}
+
+
+    {% comment %} Download Documentation  {% endcomment %}
+    
+    {% comment %} section-1  {% endcomment %}
+    
+    <div class="container-fluid text-center bg-white pl-5 pr-5 pb-5 pt-2 text-white mt-0">
+      <div class="text-right mb-1 mt-0"><a href="{% static 'images/DCFEdoc.pdf' %}" class="btn btn-outline-dark alerts-border" style="text-decoration: none; background-color: beige" target="_blank"><i class="fa fa-download" aria-hidden="true"></i> Download Documentation</a></div>
+      <div class="card border-0 bg-dark text-white" style="font-family: Arial, Helvetica, sans-serif;">
+        <h3 class="font-weight-bold pt-4 text-info" style="font-family: Georgia, serif;">About <span title="Data Curation and Feature Engineering">DCFE</span> Tool</h3>
+        <h5 class="p-3 m-2"><p class="p-0 m-0 font-weight-normal small" style="line-height: 2rem;">In the process of data analysis, it is observed that 60% of the time is spent in cleaning and preprocessing the data. 
+          To overcome this drawback and to reduce the time spent in preprocessing we have developed a tool named Data Curation and Feature Engineering Tool (DCFE Tool). 
+          Epidemiologists, Researchers or any kind of Data analysts can use this web based application tool to upload, 
+          explore and analyze the epidemic/pandemic or any health care or other domain datasets.</p></h5> 
+        <h5 class="p-3 m-2"><p class="p-0 m-0 font-weight-normal small" style="line-height: 2rem;">The tool provides the provision for the user to upload datasets which are in .csv or .xlsx file format.
+          This is a DST funded project with duration of 3 years. 
+          Project was sanctioned on April’2018 and completed on Jan, 2022. 
+          Project sanction number <b class="text-warning">DST/ICPS/EDA/2018/SL.No:18.</b></p></h5>
+        <h5 class="p-3 m-2"><p class="p-0 m-0 font-weight-normal small" style="line-height: 2rem;">This tool was developed in CUDA lab, Department of Computer Applications, 
+          NIT Trichy under the <b class="text-warning">Principal Investigator Dr.S.Nickolas</b>, Professor, Department of Computer Applications,
+          and <b class="text-warning">Co-Principal Investigator Dr.S.Mary Saira Banu</b>, Professor and Head, Department of Computer Science and Engineering, NIT, Trichy.</p></h5>
+        <h5 class="p-3 m-2"><p class="p-0 m-0 font-weight-normal small" style="line-height: 2rem;">The tool is developed using Model Template Controller (MTC) in Django Web Based Framework with supporting coding using python, Html5, CSS3, Bootstrap4, JavaScript and Jquery.</p></h5>
+      </div>
+    </div>
+
+
+    {% comment %} section-2  {% endcomment %}
+    
+    <div class="container-fluid text-center p-5 text-dark mb-3 mt-0" style="background-color: beige">
+      <div class="row p-2"><h4 class="col col-12 text-center font-weight-bold text-info">DCFE Tool Demonstration</h4></div>
+      <div class="row p-3">
+        <div class="col col-12 col-md-12 col-sm-12 col-lg-4 pt-1">
+          <div class="text-center text-white font-weight-normal bg-dark border-1 rounded-top mb-0 small ml-5 mr-5">DCFE Introduction</div>
+          <video width="320" height="175" controls class="border-none shadow-lg rounded-bottom">
+            <source src="{% static 'videos/DCFE_Introduction.mp4' %}" title="DCFE Introduction" type="video/mp4" autoplay="off" preload="none">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="col col-12 col-md-12 col-sm-12 col-lg-4 pt-1">
+          <div class="text-center text-white font-weight-normal bg-dark border-1 rounded-top mb-0 small ml-5 mr-5">Dataset Overview Exploration</div>
+          <video width="320" height="175" controls class="border-none shadow-lg rounded-bottom">
+            <source src="{% static 'videos/Dataset_Overview_Exploration.mp4' %}" title="Dataset Overview & Exploration" type="video/mp4" autoplay="off" preload="none">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="col col-12 col-md-12 col-sm-12 col-lg-4 pt-1">
+          <div class="text-center text-white font-weight-normal bg-dark border-1 rounded-top mb-0 small ml-5 mr-5">Remove Unwanted Features</div>
+          <video width="320" height="175" controls class="border-none shadow-lg rounded-bottom">
+            <source src="{% static 'videos/Remove_Unwanted_Feature.mp4' %}"  title="Remove Unwanted Feature" type="video/mp4" autoplay="off" preload="none">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+      <div class="row p-3">
+        <div class="col col-12 col-md-12 col-sm-12 col-lg-4 pt-1">
+          <div class="text-center text-white font-weight-normal bg-dark border-1 rounded-top mb-0 small ml-5 mr-5">Data Imputation</div>
+            <video width="320" height="175" controls class="border-none shadow-lg rounded-bottom">
+            <source src="{% static 'videos/Data_Imputation.mp4' %}" title="Data Imputation" type="video/mp4" autoplay="off" preload="none">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="col col-12 col-md-12 col-sm-12 col-lg-4 pt-1">
+          <div class="text-center text-white font-weight-normal bg-dark border-1 rounded-top mb-0 small ml-5 mr-5">Feature Engineering</div>
+          <video width="320" height="175" controls class="border-none shadow-lg rounded-bottom">
+            <source src="{% static 'videos/Feature_Engineering.mp4' %}" title="Feature Engineering" type="video/mp4" autoplay="off" preload="none">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="col col-12 col-md-12 col-sm-12 col-lg-4 pt-1">
+          <div class="text-center text-white font-weight-normal bg-dark border-1 rounded-top mb-0 small ml-5 mr-5">Data Visualization</div>
+            <video width="320" height="175" controls class="border-none shadow-lg rounded-bottom">
+            <source src="{% static 'videos/Data_Visualization.mp4' %}" title="Data Visualization" type="video/mp4" autoplay="off" preload="none">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+      <div class="row p-3">
+         <div class="col col-12 col-md-12 col-sm-12 col-lg-4 pt-1">
+          <div class="text-center text-white font-weight-normal bg-dark border-1 rounded-top mb-0 small ml-5 mr-5">Download Dataset</div>
+            <video width="320" height="175" controls class="border-none shadow-lg rounded-bottom">
+            <source src="{% static 'videos/Download_Dataset.mp4' %}" title="Download Dataset" type="video/mp4" autoplay="off" preload="none">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+
+    {% comment %} Upload {% endcomment %}
+    <div class="container text-center bg-light text-secondary mt-2 mb-5">
+      <div class="row mt-5">
+        <div class="col">
+          <img class="w-50" src="{% static 'images/dataset.svg' %}" alt="" />
+        </div>
+        <div class="col col-6">
+          <div class="row text-center">
+        <div class="col col-12 text-center font-weight-bold pt-2" style="font-size: 50px;">Upload your dataset</div>
+      </div>
+      <div class="row text-center">
+        <div class="col col-12 text-center h5">to Explore, Analyze and Share quality data</div>
+      </div>
+        </div>
+        <div class="col">
+            <img class="w-50" src="{% static 'images/explore.svg' %}" alt="" />
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col"> 
+            <img class="w-50" src="{% static 'images/imputation.svg' %}" alt="" />
+
+        </div>
+        <div class="col col-md-6">
+          <form action="/" method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                <input
+                  type="file"
+                  name="dataset"
+                  accept=".csv,.xls,.xlsx"
+                  class="form-control-file form-control-sm btn-dark rounded"
+                  id="exampleFormControlFile1"
+                  required
+                />
+              </div>
+              <button class="btn btn-lg btn-dark rounded-0"><i class="fa fa-upload" aria-hidden="true"></i> Upload</button>
+              <p class="text-dark font-weight-bold text-center">(.csv and .xlsx files)</p>
+             
+            </form>
+        </div>
+        <div class="col">
+            <img class="w-50" src="{% static 'images/visual01.svg' %}" alt="" />
+
+        </div>
+      </div>
+      <div class="row mt-5">
+        <div class="col">
+            <img class="w-50" src="{% static 'images/visual02.svg' %}" alt="" />
+        </div>
+        <div class="col mt-5">
+            <img class="w-50" src="{% static 'images/visual04.svg' %}" alt="" />
+
+        </div>
+        <div class="col">
+            <img class="w-50" src="{% static 'images/visual03.svg' %}" alt="" />
+          </div>
+        </div>
+      </div>
+      
+      <div id="containerDiv"></div>
+      
+      {% comment %} Footer {% endcomment %}
+      <div class="container-fluid bg-dark text-center mt-5 p-4 text-white">
+        <div class="card border-0 bg-dark text-white">
+          <h4 class="font-weight-bold text-info">Data Curation and Feature Engineering</h4>
+          <h6  class="text-info">DST Sponsored Project</h6>
+          <h6  class="text-info">ICPS Division</h6>
+          
+          <div class="font-weight-light">
+            <p><span class="font-weight-normal text-warning">PI: Dr.S.Nickolas</span> <small>Professor, Department of CA, NITT.</small></p>
+            <p><span class="font-weight-normal text-warning">Co PI: Dr.S.Mary Saira Bhanu</span> <small>Professor, Department of CSE, NITT.</small></p>
+          </div>
+        </div>
+      </div>
+
+    
+      <div class="container-fluid text-center mb-0 p-4 text-white" style="background-color: black">
+     <div class="container pl-0">
+       <div class="row">
+         <div class="col text-center">
+          <p class="font-weight-light text-muted"><small>&copy; Copyright 2021, NIT Trichy</small></p>
+         </div>
+       </div>
+     </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> 
+    <script>
+        var viewMode = getCookie("view-mode");
+        if(viewMode == "desktop"){
+          viewport.setAttribute('content', 'width=1024');
+        }else if (viewMode == "mobile"){
+          viewport.setAttribute('content', 'width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no');
+        }
+    </script>
+  </body>
+</html>
