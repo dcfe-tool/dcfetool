@@ -24,11 +24,11 @@
 
 
 
-   #### --> cd ./dcfetool                     (To change the path to the directory which contains the Manage.py file)
+   #### --> cd ./dcfetool                     (to change the path to the directory which contains the Manage.py file)
    
-   #### --> pip install Django                (To install the Django package)
+   #### --> pip install Django                (to install the Django package)
    
-   #### --> pip install -r requirements.txt   (To install all the neccessary packages)
+   #### --> pip install -r requirements.txt   (to install all the neccessary packages)
    
    
    
