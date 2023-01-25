@@ -1,12 +1,12 @@
-### Steps to Setting up the project on local machine (Windows) to run the project
+## Steps to Setting up the project on local machine (Windows) to run the project
 
 
-Note: Make sure you have installed the Python on your machine. If not get it from here https://www.python.org/downloads/
+#### Note: Make sure you have installed the Python on your machine. If not get it from here https://www.python.org/downloads/
 
 
 1) Open Windows Command Prompt and run the following command to clone the project to your local machine.
 
-   --> git clone https://github.com/dcfe-tool/dcfetool.git
+   #### git clone https://github.com/dcfe-tool/dcfetool.git
    
    
 2) Open the project via any IDE tool. (Example: Visual Studio Code. download it here https://code.visualstudio.com/Download)
@@ -24,11 +24,11 @@ Note: Make sure you have installed the Python on your machine. If not get it fro
 
 
 
-   --> cd ./dcfetool                     (To change the path to the directory which contains the Manage.py file)
+   #### --> cd ./dcfetool                     (To change the path to the directory which contains the Manage.py file)
    
-   --> pip install Django                (To install the Django package)
+   #### --> pip install Django                (To install the Django package)
    
-   --> pip install -r requirements.txt   (To install all the neccessary packages)
+   #### --> pip install -r requirements.txt   (To install all the neccessary packages)
    
    
    
@@ -36,7 +36,7 @@ Note: Make sure you have installed the Python on your machine. If not get it fro
 
 
 
-   --> python manage.py runserver
+   #### --> python manage.py runserver
 
 
 6) You will get something as showned in the image below. Click the url http://127.0.0.1:8000 and the application will be rendered on browser.
