@@ -1,7 +1,7 @@
 ## Steps to Setting up the project on local machine (Windows) to run the project
 
 
-#### Note: Make sure you have installed the Python on your machine. If not get it from here https://www.python.org/downloads/
+#### Note: Make sure Python has installed on your machine. If not, get it from here https://www.python.org/downloads/
 
 
 1) Open Windows Command Prompt and run the following command to clone the project to your local machine.
